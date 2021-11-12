@@ -23,6 +23,9 @@ public class Node
     private int healthPerFCost = 5; //if a building is on this tile, how much health it has will detirmin how much it costs to go threw it as a path
     public int pathDistacneFromBase = 0;
 
+    public GameObject resource;
+    public bool collectable;
+
     public Node(int yPos, int xPos, Vector2 targetPos)
     {
         position = new Vector2(xPos, yPos);
@@ -37,6 +40,15 @@ public class Node
             int b = (int)Math.Abs(position.y - targetPos.y);
             float c = (float)Math.Sqrt(Math.Abs(a + b));
             hCost = c;
+        }
+    }
+
+    public void MakeFriendsCollectable()
+    {
+        foreach(Node f in friends) {
+            if (f == null) continue;
+            if (!f.traverable) continue;
+            f.collectable = true;
         }
     }
 

@@ -15,6 +15,11 @@ public class Shop : MonoBehaviour
     public int selectedUnit;
     public GameObject goastUnit;
 
+    private bool collector;
+    private List<GameObject> recievers = new List<GameObject>();
+    private List<Transporter> transports = new List<Transporter>();
+    private List<ResourceGiver> resourceGivers = new List<ResourceGiver>();
+
     public Text moneyText; 
     public int money;
 
@@ -24,6 +29,7 @@ public class Shop : MonoBehaviour
     private Camera cam;
 
     public PathFinder pathFinder;
+    public ResourceManager rm;
 
     private Animator animator;
     private bool shopOpen = false;
@@ -35,6 +41,7 @@ public class Shop : MonoBehaviour
         animator = GetComponent<Animator>();
         shopOpen = false;
         moneyText.text = money.ToString();
+        recievers.Add(GameObject.FindGameObjectWithTag("Base"));
         SetGoasts();
     }
 
@@ -144,8 +151,36 @@ public class Shop : MonoBehaviour
             return;
 
         GameObject newObj = Instantiate(structures[i], destination, Quaternion.identity);
+
+        if (collector) {
+            resourceGivers.Add(newObj.GetComponent<ResourceGiver>());
+            if(newObj.GetComponent<ResourceGiver>().type.Equals("Gold"))
+                rm.goldMines.Add(newObj.GetComponent<ResourceGiver>());
+            else if (newObj.GetComponent<ResourceGiver>().type.Equals("Stone"))
+                rm.quaries.Add(newObj.GetComponent<ResourceGiver>());
+            newObj.GetComponent<ResourceGiver>().transports = transports;
+        }
+
+        if (newObj.GetComponent<Receiver>() != null) {
+            foreach(Transporter t in transports) {
+                t.receivers.Add(newObj);
+                t.GetDistance(newObj);
+            }
+            recievers.Add(newObj);
+        }
+
+        if (newObj.GetComponent<Transporter>() != null) {
+            newObj.GetComponent<Transporter>().receivers = recievers;
+            newObj.GetComponent<Transporter>().Staterr();
+            foreach (ResourceGiver t in resourceGivers) {
+                t.NewTransporter(newObj.GetComponent<Transporter>());
+            }
+            transports.Add(newObj.GetComponent<Transporter>());
+        }
+
         pathFinder.ReUpdatePath(newObj, destination);
         SpendMoney(prices[selectedUnit]);
+
         if (!Input.GetKey(KeyCode.LeftShift))
         {
             selectedUnit = -1;
@@ -168,7 +203,12 @@ public class Shop : MonoBehaviour
         if (pathFinder.nodes[(int)vec.y, (int)vec.x] == null)
             return false;
 
-        if (pathFinder.nodes[(int)vec.y, (int)vec.x].traverable && pathFinder.nodes[(int)vec.y, (int)vec.x].occupance == null)
+        Node spot = pathFinder.nodes[(int)vec.y, (int)vec.x];
+
+        if (collector && !spot.collectable)
+            return false;
+
+        if (spot.traverable && spot.occupance == null)
             return true;
         else
             return false;
@@ -182,6 +222,11 @@ public class Shop : MonoBehaviour
         {
             Destroy(goastUnit);
         }
+
+        if (structures[num-1].GetComponent<ResourceGiver>() != null)
+            collector = true;
+        else
+            collector = false;
 
         selectedUnit = num - 1;
         GameObject currentGoast = goastUnits[num - 1];

@@ -19,6 +19,7 @@ public class PathFinder : MonoBehaviour
     [SerializeField] public GameObject target;
     [SerializeField] public List<GameObject> occupancy; //something on the tile like either a mountain or a tower or building
     [SerializeField] public GameObject[] unwalkable;
+    [SerializeField] public GameObject[] resources;
 
     // Start is called before the first frame update
     void Awake()
@@ -48,9 +49,16 @@ public class PathFinder : MonoBehaviour
             nodes[(int)pos.y, (int)pos.x].traverable = false;
         }
 
+        resources = GameObject.FindGameObjectsWithTag("Resource");
 
+        foreach (GameObject g in resources) {
+            Vector2 pos = RoundCords(g.transform.position);
+            nodes[(int)pos.y, (int)pos.x].traverable = false;
+            nodes[(int)pos.y, (int)pos.x].collectable = false;
+            nodes[(int)pos.y, (int)pos.x].resource = g;
+            nodes[(int)pos.y, (int)pos.x].MakeFriendsCollectable();
+        }
 
-        Debug.Log("Made Map");
 
     }
 

@@ -18,6 +18,8 @@ public class EnemyLife : MonoBehaviour
     public int moneyDrop;
     public Shop shop;
 
+    public GameObject corps;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,15 +28,14 @@ public class EnemyLife : MonoBehaviour
 
         healthSlider.maxValue = maxHealth;
         healthSlider.value = currentHealth;
-        
-        if(GameObject.Find("Shop") != null)
-            shop = GameObject.Find("Shop").GetComponent<Shop>();
+
+        shop = GameObject.Find("Shop").GetComponent<Shop>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(currentHealth <= 0)
+        if (currentHealth <= 0)
         {
             animator.SetTrigger("Die");
             unitCanvas.enabled = false;
@@ -50,4 +51,9 @@ public class EnemyLife : MonoBehaviour
         healthSlider.value = currentHealth;
     }
 
+    public void Die()
+    {
+        Instantiate(corps, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+    }
 }

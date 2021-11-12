@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Unwalkable
   - Enemy
+  - Transporter
+  - Resource
+  - RM
+  - Base
   layers:
   - Default
   - TransparentFX

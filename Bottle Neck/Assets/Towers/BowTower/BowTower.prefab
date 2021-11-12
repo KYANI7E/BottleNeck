@@ -630,8 +630,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43a6ef743326f344a8fd43bfb7eb0208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rateOfFire: 1
-  damage: 40
+  rateOfFire: 0.5
+  damage: 20
   cannonBall: {fileID: 8333957354512736312, guid: 3f20c47b4161dc24db927dd22d0ae1d1,
     type: 3}
   gun: {fileID: 3108949031672089580}
