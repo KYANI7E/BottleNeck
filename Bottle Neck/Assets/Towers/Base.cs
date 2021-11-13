@@ -15,6 +15,10 @@ public class Base : MonoBehaviour
 
     public Slider healthSlider;
     public Canvas unitCanvas;
+    public Shop shop;
+
+    public float rateOfPassiveMoney;
+    private float coolDown;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +35,12 @@ public class Base : MonoBehaviour
     {
         if (currentHp != maxHp)
             unitCanvas.enabled = true;
+
+        if(coolDown < 0) {
+            shop.AddMoney(1);
+            coolDown = rateOfPassiveMoney;
+        }
+        coolDown -= Time.deltaTime;
     }
 
     public void Hit(int damage)

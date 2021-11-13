@@ -624,7 +624,7 @@ MonoBehaviour:
   animator: {fileID: 5977649488976008617}
   healthSlider: {fileID: 1709782878}
   unitCanvas: {fileID: 1204324136}
-  moneyDrop: 5
+  moneyDrop: 0
   shop: {fileID: 0}
   corps: {fileID: 1935604196574894779, guid: 6d464ab5e9ba5ab419db3d46cb3c3d98, type: 3}
 --- !u!50 &4823449293094893171

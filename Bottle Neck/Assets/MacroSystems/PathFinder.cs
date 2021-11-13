@@ -49,18 +49,28 @@ public class PathFinder : MonoBehaviour
             nodes[(int)pos.y, (int)pos.x].traverable = false;
         }
 
-        resources = GameObject.FindGameObjectsWithTag("Resource");
+        MakeResources("Gold");
+        MakeResources("Stone");
 
-        foreach (GameObject g in resources) {
-            Vector2 pos = RoundCords(g.transform.position);
-            nodes[(int)pos.y, (int)pos.x].traverable = false;
-            nodes[(int)pos.y, (int)pos.x].collectable = false;
-            nodes[(int)pos.y, (int)pos.x].resource = g;
-            nodes[(int)pos.y, (int)pos.x].MakeFriendsCollectable();
-        }
 
 
     }
+
+    private void MakeResources(string type)
+    {
+        resources = GameObject.FindGameObjectsWithTag(type);
+
+        foreach (GameObject g in resources) {
+            Vector2 pos = RoundCords(g.transform.position);
+            Node temp = nodes[(int)pos.y, (int)pos.x];
+            temp.traverable = false;
+            temp.collectable = false;
+            temp.resource = g;
+            temp.type = type;
+            temp.MakeFriendsCollectable(type);
+        }
+    }
+
 
     public void Update()
     {

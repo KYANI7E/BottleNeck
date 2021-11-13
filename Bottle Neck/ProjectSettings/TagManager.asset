@@ -7,9 +7,10 @@ TagManager:
   - Unwalkable
   - Enemy
   - Transporter
-  - Resource
   - RM
   - Base
+  - Gold
+  - Stone
   layers:
   - Default
   - TransparentFX

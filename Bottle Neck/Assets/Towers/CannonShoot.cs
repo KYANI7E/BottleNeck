@@ -10,6 +10,7 @@ public class CannonShoot : MonoBehaviour
 
     [SerializeField] float rateOfFire = 0;
     [SerializeField] int damage = 0;
+    public int amountToFire;
     [SerializeField] GameObject cannonBall;
     private float coolingDown = 0;
 
@@ -36,7 +37,7 @@ public class CannonShoot : MonoBehaviour
             LookAt();
             if (enemy.GetComponent<EnemyLife>().ghoastHealth > 0)
             {
-                if (coolingDown <= 0)
+                if (coolingDown <= 0 && GetComponent<Receiver>().currentHolding > amountToFire)
                 {
                     Fire();
                     coolingDown = rateOfFire;
@@ -70,5 +71,7 @@ public class CannonShoot : MonoBehaviour
         ball.GetComponent<Projectile>().target = enemy;
         ball.GetComponent<Projectile>().damage = damage;
         enemy.GetComponent<EnemyLife>().ghoastHealth -= damage;
+
+        GetComponent<Receiver>().Less(1);
     }
 }

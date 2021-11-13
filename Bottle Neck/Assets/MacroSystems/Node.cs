@@ -20,11 +20,11 @@ public class Node
     public Vector2 position;
 
     public GameObject occupance;
-    private int healthPerFCost = 5; //if a building is on this tile, how much health it has will detirmin how much it costs to go threw it as a path
     public int pathDistacneFromBase = 0;
 
     public GameObject resource;
     public bool collectable;
+    public string type;
 
     public Node(int yPos, int xPos, Vector2 targetPos)
     {
@@ -43,12 +43,13 @@ public class Node
         }
     }
 
-    public void MakeFriendsCollectable()
+    public void MakeFriendsCollectable(string t)
     {
         foreach(Node f in friends) {
             if (f == null) continue;
             if (!f.traverable) continue;
             f.collectable = true;
+            f.type = t;
         }
     }
 
@@ -80,7 +81,11 @@ public class Node
         {
             float temp = 0;
             if (occupance != null)
-                temp = occupance.GetComponent<Building>().currentHealth / healthPerFCost;
+                if (occupance.GetComponent<Building>().blockPerHpValue > 0)
+                    temp = occupance.GetComponent<Building>().currentHealth / occupance.GetComponent<Building>().blockPerHpValue;
+                else
+                    temp = -5;
+
             fCost = gCost + hCost  + temp;
         }
         else
@@ -157,9 +162,13 @@ public class Node
     {
         int tileCost;
         if (occupance != null)
-            tileCost = occupance.GetComponent<Building>().currentHealth / healthPerFCost;
+            if (occupance.GetComponent<Building>().blockPerHpValue > 0)
+                tileCost = occupance.GetComponent<Building>().currentHealth / occupance.GetComponent<Building>().blockPerHpValue;
+            else
+                tileCost = -5;
         else
             tileCost = 1;
+
         return tileCost;
     }
 }

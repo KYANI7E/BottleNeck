@@ -200,13 +200,17 @@ public class Shop : MonoBehaviour
     {
         Vector2 vec = pathFinder.RoundCords(spawnPos);
 
-        if (pathFinder.nodes[(int)vec.y, (int)vec.x] == null)
+        if ((int)vec.y < 0 || (int)vec.y > pathFinder.nodes.GetLength(0) || (int)vec.x < 0 || (int)vec.x > pathFinder.nodes.GetLength(1))
             return false;
 
         Node spot = pathFinder.nodes[(int)vec.y, (int)vec.x];
 
         if (collector && !spot.collectable)
             return false;
+
+        if (collector)
+            if (!spot.type.Equals(structures[selectedUnit].GetComponent<ResourceGiver>().type))
+                return false; 
 
         if (spot.traverable && spot.occupance == null)
             return true;

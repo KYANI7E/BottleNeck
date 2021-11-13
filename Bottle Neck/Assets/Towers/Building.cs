@@ -8,9 +8,10 @@ public class Building : MonoBehaviour
 
     public int currentHealth;
     [SerializeField] public int maxHealth;
+    public int blockPerHpValue;
+
 
     public Slider healthSlider;
-    public Canvas unitCanvas;
 
 
     // Start is called before the first frame update
@@ -26,10 +27,18 @@ public class Building : MonoBehaviour
     void Update()
     {
         if (currentHealth <= 0)
-            Destroy(this.gameObject);
+            Die();
 
         if (currentHealth != maxHealth)
-            unitCanvas.enabled = true;
+            healthSlider.gameObject.SetActive(true);
+    }
+
+    private void Die()
+    {
+        if(GetComponent<Transporter>() != null) {
+            GetComponent<Transporter>().Die();
+        }else
+        Destroy(this.gameObject);
     }
 
     public void Hit(int damage)

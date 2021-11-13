@@ -213,6 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   maxHealth: 500
+  blockPerHpValue: 10
   healthSlider: {fileID: 9199368070914811840}
   unitCanvas: {fileID: 7850800572511017169}
 --- !u!1 &5785237539787981930
