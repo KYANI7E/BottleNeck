@@ -71,6 +71,8 @@ public class Shop : MonoBehaviour
                 Destroy(goastUnit);
                 GameObject currentGoast = goastUnits[selectedUnit];
                 goastUnit = Instantiate(currentGoast, new Vector3(destination.x, destination.y, 0), new Quaternion(0, 0, 0, 0));
+                if (goastUnit.GetComponent<TransLines>() != null)
+                    AssignPlacesForTranLine();
             }
     }
 
@@ -162,11 +164,12 @@ public class Shop : MonoBehaviour
         }
 
         if (newObj.GetComponent<Receiver>() != null) {
-            foreach(Transporter t in transports) {
-                t.receivers.Add(newObj);
-                t.GetDistance(newObj);
-            }
             recievers.Add(newObj);
+            foreach(Transporter t in transports) {
+                float dis = Vector2.Distance(destination, t.theGameObject.transform.position);
+                if (dis <= t.range) ;
+                    t.CheckPathsAgain(newObj);
+            }
         }
 
         if (newObj.GetComponent<Transporter>() != null) {
@@ -191,7 +194,8 @@ public class Shop : MonoBehaviour
             Destroy(goastUnit);
             GameObject currentGoast = goastUnits[selectedUnit];
             goastUnit = Instantiate(currentGoast, new Vector3(destination.x, destination.y, 0), new Quaternion(0, 0, 0, 0));
-
+            if (goastUnit.GetComponent<TransLines>() != null)
+                AssignPlacesForTranLine();
         }
 
     }
@@ -237,6 +241,19 @@ public class Shop : MonoBehaviour
 
         goastUnit = Instantiate(currentGoast, new Vector3(destination.x, destination.y, 0), new Quaternion(0, 0, 0, 0));
 
+        if (goastUnit.GetComponent<TransLines>() != null) 
+            AssignPlacesForTranLine();
+
         CloseShop();
+    }
+
+    private void AssignPlacesForTranLine()
+    {
+        goastUnit.GetComponent<TransLines>().allPlaces.AddRange(recievers);
+        foreach (Transporter t in transports)
+            goastUnit.GetComponent<TransLines>().allPlaces.Add(t.gameObject);
+        foreach (ResourceGiver t in resourceGivers)
+            goastUnit.GetComponent<TransLines>().allPlaces.Add(t.gameObject);
+        
     }
 }

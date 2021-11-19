@@ -11,6 +11,8 @@ public class Receiver : MonoBehaviour
     public bool isBase = false;
     public string type;
 
+    public int priority;
+
     public int maxHolding;
     public int currentHolding;
     private int ghostHolding;
@@ -35,6 +37,7 @@ public class Receiver : MonoBehaviour
 
         if (type.Equals("Stone")) {
             if(ghostHolding < maxHolding) {
+                priority = maxHolding - ghostHolding;
                 rm.stoneQueue.Enqueue(this.gameObject);
                 ghostHolding++;
             }

@@ -25,7 +25,7 @@ public class ResourceGiver : MonoBehaviour
             if(Vector2.Distance(t.gameObject.transform.position, transform.position) < t.range) {
                 transInRange.Add(t);
                 t.otherInRange.Add(this.gameObject);
-                t.SetUpLine();
+                t.DrawLine();
             }
         }
 
@@ -33,10 +33,14 @@ public class ResourceGiver : MonoBehaviour
 
 
     }
-
+    public bool say = false;
     void Update()
     {
-        if(coolDown < 0 && sendingToo.Count > 0) {
+        if (say) {
+            Debug.Log(myDistances.Count + " ");
+            say = false;
+        }
+        if (coolDown < 0 && sendingToo.Count > 0) {
             Mined(sendingToo.Dequeue());
             coolDown = mineRate;
         }
@@ -58,13 +62,31 @@ public class ResourceGiver : MonoBehaviour
     {
         if (Vector2.Distance(tran.gameObject.transform.position, transform.position) < tran.range) {
             tran.otherInRange.Add(this.gameObject);
-            tran.SetUpLine();
+            tran.DrawLine();
             transInRange.Add(tran);
             GetBestDistances(tran);
         }
     }
 
-    private void TakeDistances()
+    public void NewReciever(GameObject g)
+    {
+        Transporter.DistanceData temp = new Transporter.DistanceData(null, null, 10000);
+        bool videCheck = true;
+        foreach(Transporter t in transInRange) {
+            float dis = Vector2.Distance(transform.position, t.theGameObject.transform.position);
+            foreach(Transporter.DistanceData d in t.myDistances) {
+                if (d.SameDest(g) && d.distance < temp.distance - dis) {
+                    temp = new Transporter.DistanceData(g, t.theGameObject, d.distance + dis);
+                    videCheck = false;
+                    break;
+                }
+            }
+        }
+        if (videCheck) return;
+        myDistances.Add(temp);
+    }
+
+    public void TakeDistances()
     {
         bool first = true;
         foreach(Transporter t in transInRange) {

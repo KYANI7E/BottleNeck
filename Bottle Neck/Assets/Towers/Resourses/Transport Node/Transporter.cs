@@ -8,6 +8,7 @@ public class Transporter : MonoBehaviour
     public GameObject theGameObject;
 
     public List<GameObject> transportersInRange;
+    public List<GameObject> pointed = new List<GameObject>();
     public float range;
     public GameObject[] allTransporters;
 
@@ -29,6 +30,29 @@ public class Transporter : MonoBehaviour
             nextNode = nextNodee;
             distance = dis;
         }
+        //public bool Equals(DistanceData d)
+        //{
+        //    if (receiver.Equals(d.receiver)
+        //        && nextNode.Equals(d.nextNode)
+        //        && distance == d.distance)
+        //        return true;
+        //    else
+        //        return false;
+        //}
+        public bool SameDest(GameObject g)
+        {
+            if (receiver.Equals(g))
+                return true;
+            else
+                return false;
+        }
+        public bool ChechNext(GameObject g)
+        {
+            if (nextNode.Equals(g))
+                return true;
+            else
+                return false;
+        }
     }
 
     private LineRenderer lr;
@@ -39,7 +63,14 @@ public class Transporter : MonoBehaviour
         position = transform.position;
         lr = GetComponent<LineRenderer>();
     }
-
+    public bool say = false;
+    public void Update()
+    {
+        if (say) {
+            Debug.Log(myDistances.Count + " ");
+            say = false;
+        }
+    }
 
     // Start is called before the first frame update
     //void Start()
@@ -68,11 +99,34 @@ public class Transporter : MonoBehaviour
     public void Die()
     {
         foreach(GameObject g in transportersInRange) {
-            Debug.Log("Dieedededed");
-            g.GetComponent<Transporter>().transportersInRange.Remove(this.gameObject);
-            g.GetComponent<Transporter>().SetUpLine();
+            g.GetComponent<Transporter>().RemovePath(gameObject, null);
+            g.GetComponent<Transporter>().DrawLine();
         }
         Destroy(this.gameObject);
+    }
+
+    public void RemovePath(GameObject g, GameObject r)
+    {
+        transportersInRange.Remove(g);
+        foreach(DistanceData d in myDistances) {
+            if (r == null) {
+                if (d.ChechNext(g)) {
+                    myDistances.Remove(d);
+                    foreach (GameObject f in transportersInRange) {
+                        f.GetComponent<Transporter>().RemovePath(gameObject, d.receiver);
+                    }
+                    break;
+                }
+            } else {
+                if(d.ChechNext(g) && d.SameDest(r)) {
+                    foreach (GameObject f in transportersInRange) {
+                        f.GetComponent<Transporter>().RemovePath(gameObject, d.receiver);
+                    }
+                    break;
+                }
+            }
+
+        }
     }
 
     public void Staterr()
@@ -119,14 +173,14 @@ public class Transporter : MonoBehaviour
         }
 
 
-        SetUpLine();
+        DrawLine();
 
         //foreach(DistanceData d in myDistances) {
         //    Debug.Log(d.distance);
         //}
     }
 
-    public void SetUpLine()
+    public void DrawLine()
     {
         Transform[] points = new Transform[(transportersInRange.Count + otherInRange.Count) * 2];
 
@@ -150,15 +204,31 @@ public class Transporter : MonoBehaviour
 
         }
     }
-
-    public void CheckPathsAgain()
+    public void NewReciever(GameObject g)
+    {
+        GetDistance(g);
+        foreach(GameObject f in transportersInRange) {
+            if (f.GetComponent<Transporter>().myDistances.Count != myDistances.Count)
+                CheckPathsAgain(g);
+        }
+        
+    }
+    public void CheckPathsAgain(GameObject g)
     {
         GetDistances();
-        SetUpLine();
-        if (myDistances != myDistancesLast) {
-            myDistancesLast = myDistances;
-            foreach(GameObject g in transportersInRange) {
-                CheckPathsAgain();
+        DrawLine();
+        
+        foreach(GameObject f in otherInRange) {
+            if (f.GetComponent<ResourceGiver>() != null) {
+                //f.GetComponent<ResourceGiver>().NewReciever(g);
+                f.GetComponent<ResourceGiver>().TakeDistances();
+            }
+        }
+        foreach (GameObject f in transportersInRange) {
+            //Debug.Log(f.GetComponent<Transporter>().myDistances.Count + "     " + myDistances.Count);
+            if (f.GetComponent<Transporter>().myDistances.Count < myDistances.Count) {
+                f.GetComponent<Transporter>().CheckPathsAgain(g);
+                Debug.Log("Checking Again" + f.GetComponent<Transporter>().myDistances.Count);
             }
         }
     }
@@ -183,7 +253,7 @@ public class Transporter : MonoBehaviour
     {
         float dis = Vector2.Distance(t.transform.position, transform.position);
         if (dis < range) {
-            if(receivers.Contains(t))
+            if(receivers.Contains(t) && !otherInRange.Contains(t))
                 otherInRange.Add(t);
             foreach (DistanceData d in myDistances) {
                 if (d.nextNode == t) {
@@ -192,6 +262,7 @@ public class Transporter : MonoBehaviour
                 }
             }
             myDistances.Add(new DistanceData(t, t, dis));
+            DrawLine(); 
             return;
         }
 
@@ -213,28 +284,35 @@ public class Transporter : MonoBehaviour
             List<DistanceData> temData = new List<DistanceData>();
             foreach (DistanceData d in myDistances) {
                 if (d.nextNode == tempShortest) {
-                    temData.Add(d); 
+                    temData.Add(d);
                 }
             }
             foreach (DistanceData d in temData)
                 myDistances.Remove(d);
 
             myDistances.Add(new DistanceData(t, tempShortest, shortest));
+            tempShortest.GetComponent<Transporter>().pointed.Add(this.gameObject);
+        } else {
+            Debug.Log("Found Noting");
         }
 
-        List<DistanceData> tempData = new List<DistanceData>();
-        foreach(DistanceData d in myDistances) {
-            foreach(DistanceData w in myDistances) {
-                if (d.receiver == w.receiver)
-                    if (d.distance < w.distance)
-                        tempData.Add(w);
-            }
-        }
+        //List<DistanceData> tempData = new List<DistanceData>();
+        //foreach(DistanceData d in myDistances) {
+        //    foreach(DistanceData w in myDistances) {
+        //        if (d.SameDest(w.receiver) && !d.Equals(w))
+        //            if (d.distance < w.distance)
+        //                tempData.Add(w);
+        //            else
+        //                tempData.Add(d);
+        //    }
+        //}
 
-        foreach (DistanceData d in tempData)
-            myDistances.Remove(d);
+        //foreach (DistanceData d in tempData)
+        //    myDistances.Remove(d);
 
-        SetUpLine();
+        Debug.Log(myDistances.Count);
+        amountOfDistances = myDistances.Count;
+        DrawLine();
     }
 
 }
