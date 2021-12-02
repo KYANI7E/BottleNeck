@@ -35,10 +35,12 @@ public class Building : MonoBehaviour
 
     private void Die()
     {
-        if(GetComponent<Transporter>() != null) {
-            GetComponent<Transporter>().Die();
-        }else
-        Destroy(this.gameObject);
+        if(GetComponent<TNode>() != null) {
+            GetComponent<TNode>().Die();
+        }else if (GetComponent<Receiver>() != null) {
+            GetComponent<Receiver>().Die();
+        } else
+            Destroy(this.gameObject);
     }
 
     public void Hit(int damage)

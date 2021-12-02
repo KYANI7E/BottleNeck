@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Receiver : MonoBehaviour
 {
+    public List<TNode> connectedNodes = new List<TNode>();
 
     public Vector2 position;
     public ResourceManager rm;
@@ -18,6 +19,8 @@ public class Receiver : MonoBehaviour
     private int ghostHolding;
 
     public Image cir;
+
+    public Shop shop;
 
     // Start is called before the first frame update
     void Start()
@@ -55,5 +58,18 @@ public class Receiver : MonoBehaviour
     {
         currentHolding += amount;
         cir.fillAmount = (float)currentHolding / (float)maxHolding;
+    }
+
+    public void Die()
+    {
+        List<GameObject> temp = new List<GameObject>();
+        temp.Add(this.gameObject);
+        foreach(TNode n in connectedNodes) {
+            n.recieversInRange.Remove(this.gameObject);
+            n.PathBroke(this.gameObject, temp);
+        }
+        shop.recievers.Remove(this.gameObject);
+        shop.allLined.Remove(this.gameObject);
+        Destroy(this.gameObject);
     }
 }

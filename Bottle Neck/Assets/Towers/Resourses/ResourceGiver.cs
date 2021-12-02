@@ -74,7 +74,19 @@ public class ResourceGiver : TNode
         connectors.Add(temp);
     }
 
+    public override void CheckForRecievers() {
+        theGameObject = this.gameObject;
 
+
+        //this has nothing to do with recievers btw
+        foreach (GameObject n in allNodes) {
+            float dis = Vector2.Distance(n.transform.position, this.transform.position);
+            if (dis <= range) nodesInRange.Add(n);
+        }
+        foreach (GameObject n in allNodes) {
+            n.GetComponent<TNode>().NewNode(gameObject);
+        }
+    }
     public override void DrawLine() { }
     public override void GiveConnections(GameObject node) { }
     public override void GiveConnection(Connector con, GameObject node) { }

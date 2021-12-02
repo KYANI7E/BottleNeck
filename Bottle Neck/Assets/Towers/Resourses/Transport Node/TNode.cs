@@ -18,6 +18,7 @@ public class TNode : MonoBehaviour
     public List<GameObject> allNodes = new List<GameObject>();
 
     private LineRenderer lr;
+    public Shop shop;
 
     public int connectionssss;
 
@@ -71,17 +72,12 @@ public class TNode : MonoBehaviour
         lr = GetComponent<LineRenderer>();
     }
 
-    public void CheckForRecievers()
+    public virtual void CheckForRecievers()
     {
+        theGameObject = this.gameObject;
+
         lr = GetComponent<LineRenderer>();
         
-        foreach (GameObject r in allRecievers) {
-            float dis = Vector2.Distance(r.transform.position, transform.position);
-            if(dis <= range) {
-                recieversInRange.Add(r);
-                NewConnection(r, dis);
-            }
-        }
 
         //this has nothing to do with recievers btw
         foreach (GameObject n in allNodes) {
@@ -91,6 +87,18 @@ public class TNode : MonoBehaviour
         foreach (GameObject n in allNodes) {
             n.GetComponent<TNode>().NewNode(gameObject);
         }
+
+        
+        //This is the reciever part
+        foreach (GameObject r in allRecievers) {
+            float dis = Vector2.Distance(r.transform.position, transform.position);
+            if(dis <= range) {
+                recieversInRange.Add(r);
+                NewConnection(r, dis);
+            }
+        }
+
+        DrawLine();
 
     }
 
@@ -154,7 +162,6 @@ public class TNode : MonoBehaviour
             if(!newNode.CheckIfConnectionExists(c))
                 newNode.NewConnection(c, this.gameObject, dis);
         }
-        Debug.Log(newNode.connectors.Count);
         DrawLine();
 
     }
@@ -163,13 +170,13 @@ public class TNode : MonoBehaviour
     {
         float dis = Vector2.Distance(node.transform.position, this.transform.position);
         TNode newNode = node.GetComponent<TNode>();
-         if (newNode.CheckIfShorterConnection(con, dis, this.gameObject)) {
-                return;
-            }
-            if (!newNode.CheckIfConnectionExists(con))
-                newNode.NewConnection(con, this.gameObject, dis);
+        if (newNode.CheckIfShorterConnection(con, dis, this.gameObject)) {
+            return;
+        }
+        if (!newNode.CheckIfConnectionExists(con))
+            newNode.NewConnection(con, this.gameObject, dis);
      
-        DrawLine();
+        
     }
 
     public bool CheckIfConnectionExists(Connector con)
@@ -195,9 +202,8 @@ public class TNode : MonoBehaviour
 
     public void NewConnection(Connector con, GameObject ob, float dis)
     {
-
+        ob.GetComponent<TNode>().refrences.Add(this.gameObject);
         Connector connect = new Connector(con, ob, dis);
-            Debug.Log(nodesInRange.Count + " Range count");
         foreach (Connector c in connectors)
             if (c.CheckDest(con)) {
                 connectors.Remove(c);
@@ -207,11 +213,13 @@ public class TNode : MonoBehaviour
         foreach(GameObject g in nodesInRange) {
             GiveConnection(connect, g);
         }
-
+        DrawLine();
         connectionssss = connectors.Count;
     }
+
     public void NewConnection(GameObject ob, float dis)
     {
+        ob.GetComponent<Receiver>().connectedNodes.Add(this);
         Connector connect = new Connector(ob, ob, dis);
         foreach (Connector c in connectors)
             if (c.CheckDest(ob)) {
@@ -222,6 +230,63 @@ public class TNode : MonoBehaviour
         foreach (GameObject g in nodesInRange) {
             GiveConnection(connect, g);
         }
+        DrawLine();
         connectionssss = connectors.Count;
+    }
+
+    public void Die()
+    {
+        foreach(GameObject n in nodesInRange) {
+            n.GetComponent<TNode>().nodesInRange.Remove(this.gameObject);
+            n.GetComponent<TNode>().DrawLine();
+            if (refrences.Contains(n))
+                n.GetComponent<TNode>().PathBroke(this.gameObject, new List<GameObject>());
+        }
+        shop.transports.Remove(this);
+        shop.allLined.Remove(this.gameObject);
+        Destroy(this.gameObject);
+    }
+
+    public void PathBroke(GameObject ob, List<GameObject> dest)
+    {
+        bool checkIfPath = false;
+        List<Connector> tempConnections = new List<Connector>();
+
+        if(dest.Count > 0)
+            foreach(Connector c in connectors) {
+                foreach(GameObject d in dest)
+                    if (c.CheckDest(d) && c.CheckNextNode(ob)) {
+                        tempConnections.Add(c);
+                        checkIfPath = true;
+                        break;
+                    }
+            }
+        else
+            foreach(Connector c in connectors) {
+                if (c.CheckNextNode(ob)) {
+                    tempConnections.Add(c);
+                    checkIfPath = true;
+                    dest.Add(c.desination);
+                }
+            }
+
+        foreach (Connector c in tempConnections) connectors.Remove(c);
+
+        if (checkIfPath)
+            if (GetComponent<ResourceGiver>() == null) {
+                foreach (GameObject n in refrences) {
+                    if (n == null) continue;
+                    n.GetComponent<TNode>().PathBroke(this.gameObject, new List<GameObject>());
+                }
+            } else {
+                foreach (GameObject g in nodesInRange) {
+                    g.GetComponent<TNode>().GiveConnections(this.gameObject);
+                }
+            }
+        else {
+            GiveConnections(this.gameObject);
+        }
+        DrawLine();
+
     }
 }

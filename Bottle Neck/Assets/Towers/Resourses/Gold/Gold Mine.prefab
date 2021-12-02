@@ -82,8 +82,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7133f01f3e0d277488b7993753e78546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transports: []
-  transInRange: []
+  theGameObject: {fileID: 0}
+  position: {x: 0, y: 0}
+  refrences: []
+  nodesInRange: []
+  resourcesInRange: []
+  recieversInRange: []
+  range: 5
+  allRecievers: []
+  allNodes: []
+  shop: {fileID: 0}
+  connectionssss: 0
   resource: {fileID: 1987092892196655485, guid: 903536c615446c84fbaa6b94328dc1c1,
     type: 3}
   mineRate: 1

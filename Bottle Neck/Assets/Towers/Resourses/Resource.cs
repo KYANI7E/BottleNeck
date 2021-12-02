@@ -21,8 +21,10 @@ public class Resource : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!arrived)
-        {
+        if (currentNode == null)
+           NoNode();
+        else
+        if (!arrived) {
             if (currentNode.GetComponent<TNode>() != null)
                 desPos = new Vector2(currentNode.GetComponent<TNode>().position.x, currentNode.GetComponent<TNode>().position.y);
             else
@@ -32,6 +34,8 @@ public class Resource : MonoBehaviour
             Move();
         }
     }
+
+
 
     private void CheckAndChange()
     {
@@ -46,6 +50,10 @@ public class Resource : MonoBehaviour
                 foreach (TNode.Connector d in currentNode.GetComponent<TNode>().connectors) {
                     if (d.desination == destination) {
                         currentNode = d.nextNode;
+                        if(currentNode == null) {
+                            NoNode();
+                            return;
+                        }
                         if (currentNode.GetComponent<TNode>() != null)
                             desPos = new Vector2(currentNode.GetComponent<TNode>().position.x, currentNode.GetComponent<TNode>().position.y);
                         else
@@ -55,6 +63,11 @@ public class Resource : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void NoNode()
+    {
+        Destroy(this.gameObject);
     }
 
     private void Arrived()
