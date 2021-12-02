@@ -12,6 +12,9 @@ public class TransLines : MonoBehaviour
     public List<GameObject> allPlaces = new List<GameObject>();
     public List<GameObject> close = new List<GameObject>();
 
+    public bool isGiver;
+    public bool isReciever;
+    public string type;
 
     // Start is called before the first frame update
     void Start()
@@ -24,15 +27,65 @@ public class TransLines : MonoBehaviour
     void Update()
     {
         foreach(GameObject g in allPlaces) {
-            if (Vector2.Distance(g.transform.position, transform.position) < range) {
-                if (!close.Contains(g)) {
-                    close.Add(g);
+            if (Vector2.Distance(g.transform.position, transform.position) < range && RaycastCheck(g)) {
+                if (!close.Contains(g) && CheckIfWant(g)) {
+                        close.Add(g);
+                    
                 }
             } else if (close.Contains(g))
                 close.Remove(g);
         }
 
         DrawLine();
+    }
+
+    private bool RaycastCheck(GameObject thing)
+    {
+        float dis = Vector2.Distance(thing.transform.position, transform.position);
+        Vector2 raycastDir = thing.transform.position - transform.position;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, raycastDir, dis, LayerMask.GetMask("Transport"));
+        //Debug.DrawRay(transform.position, raycastDir, Color.green);
+
+        bool good = false;
+        Debug.Log(hits.Length);
+        for (int i = 0; i < hits.Length; i++) {
+            if (hits[i].collider != null) {
+                if(hits[i].collider.gameObject.name.Equals("Mountain Shit")) {
+                    good = false;
+                    Debug.Log("Smoing crack");
+                    break;
+                }
+                if (hits[i].collider.gameObject.Equals(thing))
+                    good = true;
+                else if (hits[i].collider.gameObject.name.Equals("Trans Collider")) {
+                    if (hits[i].collider.gameObject.transform.parent.gameObject.Equals(thing))
+                        good = true;
+                }
+            }
+        }
+        if (good) return true;
+        else return false;
+    }
+
+    public bool CheckIfWant(GameObject g)
+    {
+        if (!isGiver && !isReciever) return true;
+
+        if (g.GetComponent<ResourceGiver>() != null) {
+            if (isGiver) return false;
+            ResourceGiver temp = g.GetComponent<ResourceGiver>();
+            if (temp.type.Equals(type))
+                return true;
+            else return false;
+        } else if (g.GetComponent<Receiver>() != null) {
+            if (isReciever) return false;
+            Receiver temp = g.GetComponent<Receiver>();
+            if (temp.type.Equals(type))
+                return true;
+            else return false;
+        } else 
+            return true;
     }
 
     public void DrawLine()

@@ -39,18 +39,14 @@ public class Resource : MonoBehaviour
 
     private void CheckAndChange()
     {
-        if (Vector2.Distance(transform.position, desPos) <= howCloseToCenter)
-        {
-            if (currentNode == destination)
-            {
+        if (Vector2.Distance(transform.position, desPos) <= howCloseToCenter) {
+            if (currentNode == destination) {
                 Arrived();
-            }
-            else
-            {
+            } else {
                 foreach (TNode.Connector d in currentNode.GetComponent<TNode>().connectors) {
                     if (d.desination == destination) {
                         currentNode = d.nextNode;
-                        if(currentNode == null) {
+                        if (currentNode == null) {
                             NoNode();
                             return;
                         }

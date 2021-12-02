@@ -38,6 +38,9 @@ public class Shop : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject basee = GameObject.FindGameObjectWithTag("Base");
+        allLined.Add(basee);
+
         cam = Camera.main;
         animator = GetComponent<Animator>();
         shopOpen = false;
@@ -138,7 +141,7 @@ public class Shop : MonoBehaviour
             mouse_Pos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
 
             destination = new Vector3(Mathf.Round(mouse_Pos.x), Mathf.Round(mouse_Pos.y), 0); //rounds the cords to the nearst one so it click
-            goastUnit.transform.position = new Vector3(Mathf.Round(mouse_Pos.x), Mathf.Round(mouse_Pos.y), -5); //moves the goast unit to the mouse position
+            goastUnit.transform.position = new Vector3(Mathf.Round(mouse_Pos.x), Mathf.Round(mouse_Pos.y), 0); //moves the goast unit to the mouse position
 
             if (Input.GetMouseButton(0) && prices[selectedUnit] <= money &&
                 !EventSystem.current.IsPointerOverGameObject())
@@ -182,14 +185,8 @@ public class Shop : MonoBehaviour
             foreach(TNode n in transports) {
                 newObj.GetComponent<TNode>().allNodes.Add(n.theGameObject);
             }
-            //foreach (ResourceGiver n in resourceGivers) {
-            //    newObj.GetComponent<TNode>().allNodes.Add(n.theGameObject);
-            //}
 
             newObj.GetComponent<TNode>().CheckForRecievers();
-
-            //newObj.GetComponent<TNode>().receivers = recievers;
-            //newObj.GetComponent<TNode>().Staterr();
             transports.Add(newObj.GetComponent<TNode>());
         }
 

@@ -72,7 +72,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Positions:
   - {x: 1, y: 1, z: 0}
   - {x: 0, y: 0, z: 2.17}
@@ -96,8 +96,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.34117648, g: 0.3372549, b: 0.3372549, a: 1}
-      key1: {r: 0.34117648, g: 0.3372549, b: 0.3372549, a: 1}
+      key0: {r: 0.08244928, g: 0.8490566, b: 0, a: 1}
+      key1: {r: 0.08244928, g: 0.8490566, b: 0, a: 1}
       key2: {r: 0.34117648, g: 0.3372549, b: 0.3372549, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -146,6 +146,9 @@ MonoBehaviour:
   tran: {fileID: 8086528368651594936, guid: fd5f010fc7d368148b705ae9e078cab3, type: 3}
   allPlaces: []
   close: []
+  isGiver: 0
+  isReciever: 0
+  type: 
 --- !u!1 &6298638934338972741
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,7 +219,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -2135585597343286014, guid: 4b2a04fdbe0ef4d8da8f90eaca817cd1,
     type: 3}
   m_Color: {r: 0.33962262, g: 0.33802062, b: 0.33802062, a: 0.3137255}

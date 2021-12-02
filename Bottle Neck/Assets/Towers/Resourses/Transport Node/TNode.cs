@@ -81,8 +81,9 @@ public class TNode : MonoBehaviour
 
         //this has nothing to do with recievers btw
         foreach (GameObject n in allNodes) {
+            if (n.GetComponent<ResourceGiver>() != null && GetComponent<ResourceGiver>() != null) continue;
             float dis = Vector2.Distance(n.transform.position, this.transform.position);
-            if (dis <= range) nodesInRange.Add(n);
+            if (dis <= range && RaycastCheck(n)) nodesInRange.Add(n);
         }
         foreach (GameObject n in allNodes) {
             n.GetComponent<TNode>().NewNode(gameObject);
@@ -92,7 +93,7 @@ public class TNode : MonoBehaviour
         //This is the reciever part
         foreach (GameObject r in allRecievers) {
             float dis = Vector2.Distance(r.transform.position, transform.position);
-            if(dis <= range) {
+            if(dis <= range && RaycastCheck(r)) {
                 recieversInRange.Add(r);
                 NewConnection(r, dis);
             }
@@ -100,6 +101,35 @@ public class TNode : MonoBehaviour
 
         DrawLine();
 
+    }
+
+    private bool RaycastCheck(GameObject thing)
+    {
+        float dis = Vector2.Distance(thing.transform.position, transform.position);
+        Vector2 raycastDir = thing.transform.position - transform.position;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, raycastDir, dis, LayerMask.GetMask("Transport"));
+        //Debug.DrawRay(transform.position, raycastDir, Color.green);
+
+        bool good = false;
+        Debug.Log(hits.Length);
+        for (int i = 0; i < hits.Length; i++) {
+            if (hits[i].collider != null) {
+                if (hits[i].collider.gameObject.name.Equals("Mountain Shit")) {
+                    good = false;
+                    Debug.Log("Smoing crack");
+                    break;
+                }
+                if (hits[i].collider.gameObject.Equals(thing))
+                    good = true;
+                else if (hits[i].collider.gameObject.name.Equals("Trans Collider")) {
+                    if (hits[i].collider.gameObject.transform.parent.gameObject.Equals(thing))
+                        good = true;
+                }
+            }
+        }
+        if (good) return true;
+        else return false;
     }
 
     public virtual void DrawLine()
@@ -135,7 +165,7 @@ public class TNode : MonoBehaviour
     public void NewResiever(GameObject res)
     {
         float dis = Vector2.Distance(res.transform.position, this.transform.position);
-        if (dis > range) return;
+        if (dis > range || !RaycastCheck(res)) return;
 
         resourcesInRange.Add(res);
         
@@ -145,8 +175,9 @@ public class TNode : MonoBehaviour
     public void NewNode(GameObject node)
     {
         if (Vector2.Distance(node.transform.position, this.transform.position) > range) return;
+        if (!RaycastCheck(node)) return;
         if (node.Equals(gameObject)) return;
-
+        if (node.GetComponent<ResourceGiver>() != null && GetComponent<ResourceGiver>() != null) return;
         nodesInRange.Add(node);
         GiveConnections(node);
     }
