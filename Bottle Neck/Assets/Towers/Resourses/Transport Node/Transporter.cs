@@ -221,7 +221,7 @@ public class Transporter : MonoBehaviour
         foreach(GameObject f in otherInRange) {
             if (f.GetComponent<ResourceGiver>() != null) {
                 //f.GetComponent<ResourceGiver>().NewReciever(g);
-                f.GetComponent<ResourceGiver>().TakeDistances();
+                ////////////////////////////f.GetComponent<ResourceGiver>().TakeDistances();
             }
         }
         foreach (GameObject f in transportersInRange) {

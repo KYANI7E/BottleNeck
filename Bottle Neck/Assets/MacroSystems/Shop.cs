@@ -17,7 +17,7 @@ public class Shop : MonoBehaviour
 
     private bool collector;
     private List<GameObject> recievers = new List<GameObject>();
-    private List<Transporter> transports = new List<Transporter>();
+    private List<TNode> transports = new List<TNode>();
     private List<ResourceGiver> resourceGivers = new List<ResourceGiver>();
 
     public Text moneyText; 
@@ -160,25 +160,25 @@ public class Shop : MonoBehaviour
                 rm.goldMines.Add(newObj.GetComponent<ResourceGiver>());
             else if (newObj.GetComponent<ResourceGiver>().type.Equals("Stone"))
                 rm.quaries.Add(newObj.GetComponent<ResourceGiver>());
-            newObj.GetComponent<ResourceGiver>().transports = transports;
         }
 
         if (newObj.GetComponent<Receiver>() != null) {
             recievers.Add(newObj);
-            foreach(Transporter t in transports) {
-                float dis = Vector2.Distance(destination, t.theGameObject.transform.position);
-                if (dis <= t.range) ;
-                    t.CheckPathsAgain(newObj);
+            foreach (TNode t in transports) {
+                t.NewResiever(newObj);
             }
         }
 
-        if (newObj.GetComponent<Transporter>() != null) {
-            newObj.GetComponent<Transporter>().receivers = recievers;
-            newObj.GetComponent<Transporter>().Staterr();
-            foreach (ResourceGiver t in resourceGivers) {
-                t.NewTransporter(newObj.GetComponent<Transporter>());
+        if (newObj.GetComponent<TNode>() != null) {
+            newObj.GetComponent<TNode>().allRecievers = recievers;
+            foreach(TNode n in transports) {
+                newObj.GetComponent<TNode>().allNodes.Add(n.theGameObject);
             }
-            transports.Add(newObj.GetComponent<Transporter>());
+            newObj.GetComponent<TNode>().CheckForRecievers();
+
+            //newObj.GetComponent<TNode>().receivers = recievers;
+            //newObj.GetComponent<TNode>().Staterr();
+            transports.Add(newObj.GetComponent<TNode>());
         }
 
         pathFinder.ReUpdatePath(newObj, destination);
@@ -250,7 +250,7 @@ public class Shop : MonoBehaviour
     private void AssignPlacesForTranLine()
     {
         goastUnit.GetComponent<TransLines>().allPlaces.AddRange(recievers);
-        foreach (Transporter t in transports)
+        foreach (TNode t in transports)
             goastUnit.GetComponent<TransLines>().allPlaces.Add(t.gameObject);
         foreach (ResourceGiver t in resourceGivers)
             goastUnit.GetComponent<TransLines>().allPlaces.Add(t.gameObject);

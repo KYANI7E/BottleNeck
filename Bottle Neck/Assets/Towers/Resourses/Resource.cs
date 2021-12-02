@@ -23,8 +23,8 @@ public class Resource : MonoBehaviour
     {
         if (!arrived)
         {
-            if (currentNode.GetComponent<Transporter>() != null)
-                desPos = new Vector2(currentNode.GetComponent<Transporter>().position.x, currentNode.GetComponent<Transporter>().position.y);
+            if (currentNode.GetComponent<TNode>() != null)
+                desPos = new Vector2(currentNode.GetComponent<TNode>().position.x, currentNode.GetComponent<TNode>().position.y);
             else
                 desPos = new Vector2(currentNode.GetComponent<Receiver>().position.x, currentNode.GetComponent<Receiver>().position.y);
 
@@ -43,11 +43,11 @@ public class Resource : MonoBehaviour
             }
             else
             {
-                foreach (Transporter.DistanceData d in currentNode.GetComponent<Transporter>().myDistances) {
-                    if (d.receiver == destination) {
+                foreach (TNode.Connector d in currentNode.GetComponent<TNode>().connectors) {
+                    if (d.desination == destination) {
                         currentNode = d.nextNode;
-                        if (currentNode.GetComponent<Transporter>() != null)
-                            desPos = new Vector2(currentNode.GetComponent<Transporter>().position.x, currentNode.GetComponent<Transporter>().position.y);
+                        if (currentNode.GetComponent<TNode>() != null)
+                            desPos = new Vector2(currentNode.GetComponent<TNode>().position.x, currentNode.GetComponent<TNode>().position.y);
                         else
                             desPos = new Vector2(currentNode.GetComponent<Receiver>().position.x, currentNode.GetComponent<Receiver>().position.y);
                         break;

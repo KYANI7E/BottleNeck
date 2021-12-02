@@ -17,7 +17,7 @@ public class TransLines : MonoBehaviour
     void Start()
     {
         lr = GetComponent<LineRenderer>();
-        range = tran.GetComponent<Transporter>().range;
+        range = tran.GetComponent<TNode>().range;
     }
 
     // Update is called once per frame

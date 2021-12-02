@@ -88,6 +88,7 @@ MonoBehaviour:
     type: 3}
   mineRate: 1
   type: Gold
+  say: 0
 --- !u!114 &884015145557335785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,7 +105,6 @@ MonoBehaviour:
   maxHealth: 70
   blockPerHpValue: 0
   healthSlider: {fileID: 261004936461638924}
-  unitCanvas: {fileID: 4279029990765799835}
 --- !u!1 &1358939995918162632
 GameObject:
   m_ObjectHideFlags: 0

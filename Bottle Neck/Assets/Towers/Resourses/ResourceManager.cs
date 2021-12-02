@@ -39,7 +39,7 @@ public class ResourceManager : MonoBehaviour
     //    bool videCheck = true;
     //    foreach (ResourceGiver r in rg) {
     //        if (r.sendingToo.Count > 2) continue;
-    //        foreach (Transporter.DistanceData d in r.myDistances) {
+    //        foreach (TNode.DistanceData d in r.myDistances) {
     //            if (d.receiver == tempObject) {
     //                if (d.distance < shortest) {
     //                    bestGiver = r;
@@ -70,13 +70,12 @@ public class ResourceManager : MonoBehaviour
         bool videCheck = true;
         foreach(ResourceGiver r in rg) {
             if (r.sendingToo.Count > 2) continue;
-            foreach (Transporter.DistanceData d in r.myDistances) {
-                if (d.receiver == tempObject) {
+            foreach (TNode.Connector d in r.connectors) {
+                if (d.desination == tempObject) {
                     if (d.distance < shortest) {
                         bestGiver = r;
                         shortest = d.distance;
                         videCheck = false;
-                        Debug.Log("Send it wefweefw");
                         break;
                     }
                 }
