@@ -32,7 +32,7 @@ public class TransLines : MonoBehaviour
                         close.Add(g);
                     
                 }
-            } else if (close.Contains(g))
+            } else if (close.Contains(g) || !allPlaces.Contains(g))
                 close.Remove(g);
         }
 
@@ -42,18 +42,17 @@ public class TransLines : MonoBehaviour
     private bool RaycastCheck(GameObject thing)
     {
         float dis = Vector2.Distance(thing.transform.position, transform.position);
+        if (dis > range) dis = range;
         Vector2 raycastDir = thing.transform.position - transform.position;
 
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, raycastDir, dis, LayerMask.GetMask("Transport"));
         //Debug.DrawRay(transform.position, raycastDir, Color.green);
 
         bool good = false;
-        Debug.Log(hits.Length);
         for (int i = 0; i < hits.Length; i++) {
             if (hits[i].collider != null) {
                 if(hits[i].collider.gameObject.name.Equals("Mountain Shit")) {
                     good = false;
-                    Debug.Log("Smoing crack");
                     break;
                 }
                 if (hits[i].collider.gameObject.Equals(thing))
@@ -94,14 +93,24 @@ public class TransLines : MonoBehaviour
 
         lr.positionCount = points.Length;
 
+        List<GameObject> tempRemove = new List<GameObject>();
+
         int j = 0;
         foreach (GameObject t in close) {
+            if (t == null) {
+                tempRemove.Add(t);
+                j += 2;
+                continue;
+            }
             points[j] = t.transform;
             points[j + 1] = this.transform;
             j += 2;
         }
 
+        foreach (GameObject g in tempRemove) close.Remove(g);
+
         for (int i = 0; i < points.Length; i += 2) {
+            if (points[i] == null) continue;
             lr.SetPosition(i, points[i].position);
             lr.SetPosition(i + 1, transform.position);
         }

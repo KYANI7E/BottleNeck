@@ -39,7 +39,7 @@ public class Receiver : MonoBehaviour
         }
 
         if (type.Equals("Stone")) {
-            if(ghostHolding < maxHolding) {
+            if(ghostHolding < maxHolding && rm.stoneQueue.Count < 5) {
                 priority = maxHolding - ghostHolding;
                 rm.stoneQueue.Enqueue(this.gameObject);
                 ghostHolding++;

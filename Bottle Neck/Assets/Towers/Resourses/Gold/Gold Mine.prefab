@@ -97,7 +97,7 @@ MonoBehaviour:
   connectionssss: 0
   resource: {fileID: 1987092892196655485, guid: 903536c615446c84fbaa6b94328dc1c1,
     type: 3}
-  mineRate: 1
+  mineRate: 5
   type: Gold
   say: 0
 --- !u!114 &884015145557335785

@@ -90,7 +90,6 @@ public class Node
         }
         else
             fCost = 0;
-
     }
 
      public override string ToString()

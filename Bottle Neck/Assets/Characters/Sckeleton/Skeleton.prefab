@@ -539,7 +539,7 @@ Animator:
   m_GameObject: {fileID: 5977649488976008616}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e6c03a65892daaa42a91eef69ec25d79, type: 2}
+  m_Controller: {fileID: 9100000, guid: ae943c11723d36c419f74113bc16580a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -596,14 +596,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc8b82733a41ba43828084e8b2f05b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 1
+  walkSpeed: 0.8
   howCloseToCenter: 0.1
   pathFinder: {fileID: 0}
   go: 0
   distanceToGo: 0
   animator: {fileID: 5977649488976008617}
   dead: 0
-  damage: 10
+  damage: 20
   attackSpeed: 1
   distanceToTower: 0.3
 --- !u!114 &5977649489505761905

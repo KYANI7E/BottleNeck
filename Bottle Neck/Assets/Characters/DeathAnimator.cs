@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DeathAnimator : StateMachineBehaviour
 {
-
+    public GameObject corps;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -28,6 +28,7 @@ public class DeathAnimator : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         EnemyLife life = animator.gameObject.transform.parent.gameObject.GetComponent<EnemyLife>();
+        life.corps = corps;
         life.Die();
     }
 

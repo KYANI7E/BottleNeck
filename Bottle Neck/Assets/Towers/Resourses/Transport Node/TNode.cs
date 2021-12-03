@@ -106,18 +106,17 @@ public class TNode : MonoBehaviour
     private bool RaycastCheck(GameObject thing)
     {
         float dis = Vector2.Distance(thing.transform.position, transform.position);
+        if (dis > range) dis = range;
         Vector2 raycastDir = thing.transform.position - transform.position;
 
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, raycastDir, dis, LayerMask.GetMask("Transport"));
         //Debug.DrawRay(transform.position, raycastDir, Color.green);
 
         bool good = false;
-        Debug.Log(hits.Length);
         for (int i = 0; i < hits.Length; i++) {
             if (hits[i].collider != null) {
                 if (hits[i].collider.gameObject.name.Equals("Mountain Shit")) {
-                    good = false;
-                    Debug.Log("Smoing crack");
+                    good = false;;
                     break;
                 }
                 if (hits[i].collider.gameObject.Equals(thing))
