@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec58bcda90d9a644d9fca46bad4820dd, type: 3}
   m_Name: Wave 2
   m_EditorClassIdentifier: 
-  location: 0000000000000000
+  location: 0100000001000000
   enemies:
   - {fileID: 5977649489505761911, guid: f5f1d5b2562fff94eb24a4c5f89e09bb, type: 3}
   - {fileID: 5977649489505761911, guid: f5f1d5b2562fff94eb24a4c5f89e09bb, type: 3}
-  enemiesAmount: 0300000007000000
+  enemiesAmount: 0300000005000000
   intervalBetweenEnemies:
   - 0.5
-  - 0.5
+  - 1
   timeBetweenSets:
-  - 7
+  - 5
   - 14

@@ -110,7 +110,7 @@ public class PathFinder : MonoBehaviour
 
         Node startingNode = nodes[y, x];
         open.Add(startingNode);
-
+        Node prevNode = null;
         while (true)
         {
             Node current = null;
@@ -121,6 +121,7 @@ public class PathFinder : MonoBehaviour
             }
             open.Remove(current);
             closed.Add(current);
+           
             if(current == null)
             {
                 Debug.Log("No Path");
@@ -139,12 +140,18 @@ public class PathFinder : MonoBehaviour
                 if (!open.Contains(friend))
                 {
                     friend.gCost = friend.distanceFrom(startingNode);
-                    friend.SetFCost();
+                    if (current.fCost <= 0) {
+
+                        friend.SetFCost();
+                    }
+                    else {
+                        friend.fCost = 0;
+                    }
                     friend.parentNode = current;
-                    if (!open.Contains(friend))
-                        open.Add(friend);
+                    open.Add(friend);
                 }
             }
+            prevNode = current;
         }
     }
 

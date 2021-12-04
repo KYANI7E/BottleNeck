@@ -93,11 +93,13 @@ MonoBehaviour:
   range: 5
   allRecievers: []
   allNodes: []
+  lr: {fileID: 0}
   shop: {fileID: 0}
   connectionssss: 0
+  sendingToo: {fileID: 0}
   resource: {fileID: 1987092892196655485, guid: 903536c615446c84fbaa6b94328dc1c1,
     type: 3}
-  mineRate: 5
+  mineRate: 2
   type: Gold
   say: 0
 --- !u!114 &884015145557335785

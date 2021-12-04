@@ -40,7 +40,7 @@ public class Base : MonoBehaviour
             shop.AddMoney(1);
             coolDown = rateOfPassiveMoney;
         }
-        coolDown -= Time.deltaTime;
+        if(!shop.paused) coolDown -= Time.deltaTime;
     }
 
     public void Hit(int damage)

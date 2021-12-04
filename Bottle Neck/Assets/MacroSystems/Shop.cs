@@ -40,7 +40,7 @@ public class Shop : MonoBehaviour
     {
         GameObject basee = GameObject.FindGameObjectWithTag("Base");
         allLined.Add(basee);
-
+        paused = true;
         cam = Camera.main;
         animator = GetComponent<Animator>();
         shopOpen = false;
@@ -164,6 +164,7 @@ public class Shop : MonoBehaviour
                 rm.goldMines.Add(newObj.GetComponent<ResourceGiver>());
             else if (newObj.GetComponent<ResourceGiver>().type.Equals("Stone"))
                 rm.quaries.Add(newObj.GetComponent<ResourceGiver>());
+            newObj.GetComponent<ResourceGiver>().shop = this;
         }
 
         if (newObj.GetComponent<Receiver>() != null) {
@@ -172,7 +173,6 @@ public class Shop : MonoBehaviour
                 t.NewResiever(newObj);
             }
             allLined.Add(newObj);
-            newObj.GetComponent<Receiver>().shop = this;
         }
 
         if (newObj.GetComponent<TNode>() != null) {
@@ -260,5 +260,20 @@ public class Shop : MonoBehaviour
     {
         
         goastUnit.GetComponent<TransLines>().allPlaces = allLined;
+    }
+
+    public Sprite play;
+    public Sprite pause;
+    public Image butt;
+    public bool paused = true;
+    public void PauseButton()
+    {
+        if (paused) {
+            butt.sprite = pause;
+            paused = false;
+        }else if (!paused) {
+            butt.sprite = play;
+            paused = true;
+        }
     }
 }

@@ -13,6 +13,8 @@ public class Resource : MonoBehaviour
     public float howCloseToCenter;
     public bool arrived = false;
 
+    public Shop shop;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,6 +81,7 @@ public class Resource : MonoBehaviour
 
     private void Move()
     {
+        if(!shop.paused)
         transform.position = Vector2.MoveTowards(transform.position, desPos, Time.deltaTime * speed);
     }
 }

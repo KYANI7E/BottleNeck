@@ -5,14 +5,13 @@ using UnityEngine;
 public class ResourceGiver : TNode
 {
 
-    public Queue<GameObject> sendingToo = new Queue<GameObject>();
+    public GameObject sendingToo;
 
     public GameObject resource;
     public float mineRate;
     private float coolDown;
 
     public string type;
-    
 
     // Start is called before the first frame update
     void Start()
@@ -37,17 +36,19 @@ public class ResourceGiver : TNode
             Debug.Log(connectors.Count + " ");
             say = false;
         }
-        if (coolDown < 0 && sendingToo.Count > 0) {
-            Mined(sendingToo.Dequeue());
+        if (coolDown < 0 && sendingToo != null) {
+            Mined(sendingToo);
+            sendingToo = null;
             coolDown = mineRate;
         }
-        coolDown -= Time.deltaTime;
+        if(!shop.paused) coolDown -= Time.deltaTime;
     }
 
     private void Mined(GameObject gg)
     {
         GameObject res = GameObject.Instantiate(resource, transform.position, Quaternion.identity);
         res.GetComponent<Resource>().destination = gg;
+        res.GetComponent<Resource>().shop = shop;
         foreach(TNode.Connector t in connectors) {
             if(t.desination == gg) {
                 res.GetComponent<Resource>().currentNode = t.nextNode;
@@ -72,6 +73,48 @@ public class ResourceGiver : TNode
         }
         if (videCheck) return;
         connectors.Add(temp);
+    }
+
+    public override void DrawLine()
+    {
+
+        Transform[] points = new Transform[(nodesInRange.Count + resourcesInRange.Count + recieversInRange.Count) * 2];
+
+        lr.positionCount = points.Length;
+
+        int j = 0;
+        foreach (GameObject t in nodesInRange) {
+            points[j] = t.transform;
+            points[j + 1] = this.transform;
+            j += 2;
+        }
+
+        foreach (GameObject t in resourcesInRange) {
+            points[j] = t.transform;
+            points[j + 1] = this.transform;
+            j += 2;
+        }
+
+        foreach (GameObject t in recieversInRange) {
+            if(!type.Equals(t.GetComponent<Receiver>().type)) {
+                points[j] = this.transform;
+                points[j+1] = this.transform;
+                j += 2;
+                continue;
+            }
+            
+            points[j] = t.transform;
+            points[j + 1] = this.transform;
+            j += 2;
+        }
+
+
+        for (int i = 0; i < points.Length; i += 2) {
+            if (points[i] == null) continue;
+            lr.SetPosition(i, points[i].position);
+            lr.SetPosition(i + 1, transform.position);
+
+        }
     }
 
     public override void GiveConnections(GameObject node) { }

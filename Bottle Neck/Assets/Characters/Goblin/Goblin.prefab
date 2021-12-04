@@ -493,15 +493,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc8b82733a41ba43828084e8b2f05b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 1.3
+  walkSpeed: 0.9
   howCloseToCenter: 0.1
   pathFinder: {fileID: 0}
   go: 0
   distanceToGo: 0
   animator: {fileID: 5762055301532501022}
   dead: 0
-  damage: 10
-  attackSpeed: 1
+  damage: 45
+  attackSpeed: 1.2
   distanceToTower: 0.3
 --- !u!114 &5762055301062503366
 MonoBehaviour:
@@ -515,7 +515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589c5858e01e71d48a290c2879551e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 200
   currentHealth: 0
   ghoastHealth: 0
   animator: {fileID: 5762055301532501022}

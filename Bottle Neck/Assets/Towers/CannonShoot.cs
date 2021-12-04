@@ -37,7 +37,7 @@ public class CannonShoot : MonoBehaviour
             LookAt();
             if (enemy.GetComponent<EnemyLife>().ghoastHealth > 0)
             {
-                if (coolingDown <= 0 && GetComponent<Receiver>().currentHolding > amountToFire)
+                if (coolingDown <= 0 && GetComponent<Receiver>().currentHolding >= amountToFire)
                 {
                     Fire();
                     coolingDown = rateOfFire;

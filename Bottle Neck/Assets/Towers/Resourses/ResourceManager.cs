@@ -8,7 +8,7 @@ public class ResourceManager : MonoBehaviour
     public Queue<GameObject> goldQueue = new Queue<GameObject>();
     public List<ResourceGiver> goldMines = new List<ResourceGiver>();
 
-    public Queue<GameObject> stoneQueue = new Queue<GameObject>();
+    public PQ<GameObject> stoneQueue = new PQ<GameObject>();
     public List<ResourceGiver> quaries = new List<ResourceGiver>();
 
 
@@ -24,42 +24,48 @@ public class ResourceManager : MonoBehaviour
         if (goldQueue.Count > 0 && goldMines.Count > 0) {
             goldQueue = QueueGetter(goldQueue, goldMines);
         }
-        if (stoneQueue.Count > 0 && quaries.Count > 0) {
-            stoneQueue = QueueGetter(stoneQueue, quaries);
+        if (stoneQueue.Count() > 0 && quaries.Count > 0) {
+            QueueGetter(stoneQueue, quaries);
+        }else if(stoneQueue.Count() == 0) {
+            stoneQueue.EnqueueItems(temp);
+            temp.Clear();
         }
     }
 
-    //private PQ<GameObject> QueueGetter(PQ<GameObject> q, List<ResourceGiver> rg)
-    //{
-    //    float shortest = 9999;
-    //    int pri = q.highestPriority;
-    //    GameObject tempObject = q.Dequeue();
-    //    ResourceGiver bestGiver = null;
-
-    //    bool videCheck = true;
-    //    foreach (ResourceGiver r in rg) {
-    //        if (r.sendingToo.Count > 2) continue;
-    //        foreach (TNode.DistanceData d in r.myDistances) {
-    //            if (d.receiver == tempObject) {
-    //                if (d.distance < shortest) {
-    //                    bestGiver = r;
-    //                    shortest = d.distance;
-    //                    videCheck = false;
-    //                    break;
-    //                }
-    //            }
-    //        }
-    //    }
+    List<PQ<GameObject>.Item> temp = new List<PQ<GameObject>.Item>();
+    private void QueueGetter(PQ<GameObject> q, List<ResourceGiver> rg)
+    {
+        float shortest = 9999;
+        PQ<GameObject>.Item tempObject = q.Dequeue();
+        int pHolder = tempObject.pri;
+        ResourceGiver bestGiver = null;
 
 
-    //    if (videCheck) {
-    //        q.Enqueue(tempObject, pri);
-    //    }
+        bool videCheck = false;
+        foreach (ResourceGiver r in rg) {
+            if (r.sendingToo != null) continue;
+            foreach (TNode.Connector d in r.connectors) {
+                if (d.desination == tempObject.thing) {
+                    if (d.distance < shortest) {
+                        bestGiver = r;
+                        shortest = d.distance;
+                        videCheck = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!videCheck) {
 
-    //    if (bestGiver != null)
-    //        bestGiver.sendingToo.Enqueue(tempObject);
-    //    return q;
-    //}
+            temp.Add(tempObject);
+        } else {
+            bestGiver.sendingToo = tempObject.thing;
+            stoneQueue.EnqueueItems(temp);
+            temp.Clear();
+        }
+
+        return;
+    }
 
     private Queue<GameObject> QueueGetter(Queue<GameObject> q, List<ResourceGiver> rg)
     {
@@ -69,7 +75,7 @@ public class ResourceManager : MonoBehaviour
 
         bool videCheck = true;
         foreach(ResourceGiver r in rg) {
-            if (r.sendingToo.Count > 2) continue;
+            if (r.sendingToo != null) continue;
             foreach (TNode.Connector d in r.connectors) {
                 if (d.desination == tempObject) {
                     if (d.distance < shortest) {
@@ -88,7 +94,7 @@ public class ResourceManager : MonoBehaviour
         }
 
         if (bestGiver != null)
-            bestGiver.sendingToo.Enqueue(tempObject);
+            bestGiver.sendingToo = tempObject;
         return q;
     }
 }

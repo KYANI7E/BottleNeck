@@ -15,15 +15,14 @@ public class WaveButton : MonoBehaviour
 
     public float timeBetweenWaves;
     public float coolDown;
+    public Shop shop;
 
-    public bool waity = true;
 
     // Start is called before the first frame update
     void Start()
     {
         coolDown = 0;
         cir.fillAmount = 1;
-        waity = true;
         totalWaves = spawn.levelData.waves.Length;
         count.text = "1/" + totalWaves;
     }
@@ -31,13 +30,13 @@ public class WaveButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!spawn.nextWave && !waity && spawn.enemiesAlive.Count == 0 && !spawn.lastWave)
+        if (!spawn.nextWave && spawn.enemiesAlive.Count == 0 && !spawn.lastWave)
             CountDown();
     }
 
     private void CountDown()
     {
-        coolDown += Time.deltaTime;
+        if(!shop.paused) coolDown += Time.deltaTime;
         cir.fillAmount =  coolDown / timeBetweenWaves;
         if(coolDown > timeBetweenWaves)
         {
@@ -54,7 +53,6 @@ public class WaveButton : MonoBehaviour
         count.text = spawn.currentWave + 1 + "/" + totalWaves;
         cir.fillAmount = 0;
         coolDown = 0;
-        waity = false;
         spawn.NextWave();
     }
 }

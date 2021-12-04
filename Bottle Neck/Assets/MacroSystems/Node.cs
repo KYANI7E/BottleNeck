@@ -36,9 +36,10 @@ public class Node
         }
         else
         {
-            int a = (int)Math.Abs(position.x - targetPos.x);
-            int b = (int)Math.Abs(position.y - targetPos.y);
-            float c = (float)Math.Sqrt(Math.Abs(a + b));
+            float a = position.x - targetPos.x;
+            float b = position.y - targetPos.y;
+            float st = (a * a) + (b * b);
+            float c = (float)Math.Sqrt(st);
             hCost = c;
         }
     }
@@ -81,12 +82,13 @@ public class Node
         {
             float temp = 0;
             if (occupance != null)
-                if (occupance.GetComponent<Building>().blockPerHpValue > 0)
+                if (occupance.GetComponent<Building>().blockPerHpValue > 0) {
                     temp = occupance.GetComponent<Building>().currentHealth / occupance.GetComponent<Building>().blockPerHpValue;
-                else
-                    temp = -5;
+                    fCost = gCost + hCost  + temp;
+                } else {
+                    fCost = gCost - hCost;
+                }
 
-            fCost = gCost + hCost  + temp;
         }
         else
             fCost = 0;
@@ -160,11 +162,14 @@ public class Node
     private int GetTileCost()
     {
         int tileCost;
-        if (occupance != null)
-            if (occupance.GetComponent<Building>().blockPerHpValue > 0)
+        if (occupance != null) {
+            if (occupance.GetComponent<Building>().blockPerHpValue > 0) {
                 tileCost = occupance.GetComponent<Building>().currentHealth / occupance.GetComponent<Building>().blockPerHpValue;
-            else
-                tileCost = -5;
+            } else
+                tileCost = 1;
+
+        }
+
         else
             tileCost = 1;
 

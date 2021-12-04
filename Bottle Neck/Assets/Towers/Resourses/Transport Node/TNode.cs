@@ -17,7 +17,7 @@ public class TNode : MonoBehaviour
     public List<GameObject> allRecievers = new List<GameObject>();
     public List<GameObject> allNodes = new List<GameObject>();
 
-    private LineRenderer lr;
+    public LineRenderer lr;
     public Shop shop;
 
     public int connectionssss;
@@ -166,7 +166,7 @@ public class TNode : MonoBehaviour
         float dis = Vector2.Distance(res.transform.position, this.transform.position);
         if (dis > range || !RaycastCheck(res)) return;
 
-        resourcesInRange.Add(res);
+        recieversInRange.Add(res);
         
         NewConnection(res, dis);
     }
