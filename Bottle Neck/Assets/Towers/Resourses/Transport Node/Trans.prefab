@@ -775,8 +775,10 @@ MonoBehaviour:
   range: 5
   allRecievers: []
   allNodes: []
+  lr: {fileID: 0}
   shop: {fileID: 0}
   connectionssss: 0
+  speedOfThing: 3
 --- !u!58 &4392243151280500920
 CircleCollider2D:
   m_ObjectHideFlags: 0

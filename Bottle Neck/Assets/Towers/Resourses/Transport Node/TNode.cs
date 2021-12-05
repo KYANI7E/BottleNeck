@@ -21,6 +21,7 @@ public class TNode : MonoBehaviour
     public Shop shop;
 
     public int connectionssss;
+    public float speedOfThing;
 
     public struct Connector
     {

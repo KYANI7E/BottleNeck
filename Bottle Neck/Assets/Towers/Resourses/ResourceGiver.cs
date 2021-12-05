@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class ResourceGiver : TNode
@@ -12,6 +13,9 @@ public class ResourceGiver : TNode
     private float coolDown;
 
     public string type;
+
+
+    public Image cir;
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +45,11 @@ public class ResourceGiver : TNode
             sendingToo = null;
             coolDown = mineRate;
         }
-        if(!shop.paused) coolDown -= Time.deltaTime;
+        if (!shop.paused) {
+            coolDown -= Time.deltaTime;
+            float opo = mineRate - coolDown;
+            cir.fillAmount = opo / mineRate;
+        }
     }
 
     private void Mined(GameObject gg)
@@ -51,6 +59,7 @@ public class ResourceGiver : TNode
         res.GetComponent<Resource>().shop = shop;
         foreach(TNode.Connector t in connectors) {
             if(t.desination == gg) {
+                res.GetComponent<Resource>().speed = speedOfThing;
                 res.GetComponent<Resource>().currentNode = t.nextNode;
             }
         }

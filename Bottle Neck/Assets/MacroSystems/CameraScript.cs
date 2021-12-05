@@ -21,6 +21,8 @@ public class CameraScript : MonoBehaviour
 
     private bool dragging = false;
 
+    public BoxCollider2D box;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +32,7 @@ public class CameraScript : MonoBehaviour
         mapMinX = -.5f -extraSpace;
 
         cam = Camera.main;
+        box = GetComponent<BoxCollider2D>();
     }
 
 
@@ -75,6 +78,11 @@ public class CameraScript : MonoBehaviour
     {
         float newSize = cam.orthographicSize - Input.GetAxis("Mouse ScrollWheel") * scrollSpeed;
         cam.orthographicSize = Mathf.Clamp(newSize, minZoom, maxZoom);
+        float width = (cam.orthographicSize * 2) * Screen.width / Screen.height;
+        float hight = (cam.orthographicSize * 2);
+        float divi = 1.04f;
+        float minis = width - (width / divi);
+        box.size = new Vector2(width - minis,  hight - minis);
 
     }
 

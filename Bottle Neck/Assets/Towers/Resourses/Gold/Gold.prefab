@@ -46,10 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destination: {fileID: 0}
   currentNode: {fileID: 0}
-  speed: 3
+  speed: 0
   amountWorth: 1
   howCloseToCenter: 0
   arrived: 0
+  shop: {fileID: 0}
 --- !u!1 &5439507205732437260
 GameObject:
   m_ObjectHideFlags: 0

@@ -44,7 +44,7 @@ public class Spawning : MonoBehaviour
     void Update()
     {
 
-        if (nextWave == true)
+        if (nextWave == true) 
             SpawnWave();
 
         if (lastWave && enemiesAlive.Count == 0)
@@ -63,6 +63,7 @@ public class Spawning : MonoBehaviour
     float coolDownB;
     void SpawnWave()
     {
+        
         WaveData data = levelData.waves[currentWave];
         if (data.location[setIndex] != -1)
         {
@@ -82,6 +83,8 @@ public class Spawning : MonoBehaviour
                     {
                         locations[i].GetComponent<Animator>().SetBool("Play", true);
                         locations[i].transform.Find("Particles").gameObject.SetActive(false);
+                        locations[i].GetComponent<Indicatior>().indicator.SetActive(false);
+                        locations[i].GetComponent<Indicatior>().enabled = false;
                     }
             }
             flag = false;
@@ -100,8 +103,11 @@ public class Spawning : MonoBehaviour
             for (int i = 0; i < locations.Length; i++)
             {
                 for (int j = 0; j < data.location.Length; j++)
-                    if (i == levelData.waves[currentWave].location[j])
+                    if (i == levelData.waves[currentWave].location[j]) {
                         locations[i].GetComponent<Animator>().SetBool("Play", false);
+                        locations[i].GetComponent<Indicatior>().indicator.SetActive(false);
+                        locations[i].GetComponent<Indicatior>().enabled = false;
+                    }
             }
             currentWave++;
             if (currentWave < levelData.waves.Length)
@@ -136,8 +142,11 @@ public class Spawning : MonoBehaviour
 
     private void SetParitcles() 
     {
-        foreach(GameObject g in locations)
+        foreach(GameObject g in locations) {
             g.transform.Find("Particles").gameObject.SetActive(false);
+            g.GetComponent<Indicatior>().indicator.SetActive(false);
+            g.GetComponent<Indicatior>().enabled = false;
+        }
 
         for (int i = 0; i < locations.Length; i++)
         {
@@ -145,6 +154,7 @@ public class Spawning : MonoBehaviour
                 if (i == levelData.waves[currentWave].location[j] || levelData.waves[currentWave].location[j] == -1)
                 {
                     locations[i].transform.Find("Particles").gameObject.SetActive(true);
+                    locations[i].GetComponent<Indicatior>().enabled = true;
                 }
         }
     }

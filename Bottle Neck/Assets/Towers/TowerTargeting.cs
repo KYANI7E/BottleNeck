@@ -27,11 +27,12 @@ public class TowerTargeting : MonoBehaviour
         if(enemies.Count > 0)
             foreach (GameObject g in enemies)
             {
+                if (g == null) continue;
                 if (!RaycastCheck(g)) continue;
                 if (currentEnemy == null) currentEnemy = g;
                 if (currentEnemy == null) continue;
-                else if (currentEnemy.GetComponent<EnemyMover>().distanceToGo > g.GetComponent<EnemyMover>().distanceToGo)
-                {
+                if (g.GetComponent<EnemyLife>().ghoastHealth < 1) continue;
+                else if (currentEnemy.GetComponent<EnemyMover>().distanceToGo > g.GetComponent<EnemyMover>().distanceToGo) {
                     currentEnemy = g;
                 }
                 
@@ -55,6 +56,7 @@ public class TowerTargeting : MonoBehaviour
     public void CurrentGhoatDead()
     {
         enemies.Remove(currentEnemy);
+        currentEnemy = null;
     }
 
     void OnTriggerStay2D(Collider2D other)

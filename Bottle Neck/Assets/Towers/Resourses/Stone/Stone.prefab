@@ -46,10 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destination: {fileID: 0}
   currentNode: {fileID: 0}
-  speed: 3
+  speed: 0
   amountWorth: 1
   howCloseToCenter: 0
   arrived: 0
+  shop: {fileID: 0}
 --- !u!1 &5439507205732437260
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +124,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847,
     type: 3}
-  m_Color: {r: 0.33962262, g: 0.33962262, b: 0.33962262, a: 1}
+  m_Color: {r: 0.18039216, g: 0.18039216, b: 0.18039216, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

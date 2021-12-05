@@ -16,7 +16,7 @@ public class EnemyMover : MonoBehaviour
 
     public bool go = false;
 
-    public int distanceToGo;
+    public int distanceToGo = 3000;
 
     [SerializeField] Animator animator;
 
@@ -29,6 +29,11 @@ public class EnemyMover : MonoBehaviour
     private bool vertDircetion = false;
     public float distanceToTower;
 
+
+    private void Awake()
+    {
+        distanceToGo = 3000;
+    }
     // Start is called before the first frame update
     void Start()
     {

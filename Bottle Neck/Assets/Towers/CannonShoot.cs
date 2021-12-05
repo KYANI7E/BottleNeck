@@ -71,7 +71,8 @@ public class CannonShoot : MonoBehaviour
         ball.GetComponent<Projectile>().target = enemy;
         ball.GetComponent<Projectile>().damage = damage;
         enemy.GetComponent<EnemyLife>().ghoastHealth -= damage;
-
+        if(enemy.GetComponent<EnemyLife>().ghoastHealth < 1)
+            GetComponent<TowerTargeting>().CurrentGhoatDead();
         GetComponent<Receiver>().Less(1);
     }
 }

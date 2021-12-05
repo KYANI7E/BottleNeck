@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
+    public Text[] priceTexts;
     public GameObject[] structures;
     public int[] prices;
     public GameObject[] goastUnits;
@@ -46,7 +47,14 @@ public class Shop : MonoBehaviour
         shopOpen = false;
         moneyText.text = money.ToString();
         recievers.Add(GameObject.FindGameObjectWithTag("Base"));
+
+        for(int i = 0; i < priceTexts.Length; i++) {
+            priceTexts[i].text = prices[i].ToString();
+        }
+
         SetGoasts();
+
+
     }
 
     private void SetGoasts()
@@ -156,42 +164,45 @@ public class Shop : MonoBehaviour
         if (!CheckValidPlace(destination))
             return;
 
-        GameObject newObj = Instantiate(structures[i], destination, Quaternion.identity);
+        GameObject ob = Instantiate(structures[i], destination, Quaternion.identity);
 
         if (collector) {
             //resourceGivers.Add(newObj.GetComponent<ResourceGiver>());
-            if(newObj.GetComponent<ResourceGiver>().type.Equals("Gold"))
-                rm.goldMines.Add(newObj.GetComponent<ResourceGiver>());
-            else if (newObj.GetComponent<ResourceGiver>().type.Equals("Stone"))
-                rm.quaries.Add(newObj.GetComponent<ResourceGiver>());
-            newObj.GetComponent<ResourceGiver>().shop = this;
+            if(ob.GetComponent<ResourceGiver>().type.Equals("Gold"))
+                rm.goldMines.Add(ob.GetComponent<ResourceGiver>());
+            else if (ob.GetComponent<ResourceGiver>().type.Equals("Stone"))
+                rm.quaries.Add(ob.GetComponent<ResourceGiver>());
+            ob.GetComponent<ResourceGiver>().shop = this;
         }
 
-        if (newObj.GetComponent<Receiver>() != null) {
-            recievers.Add(newObj);
+        if (ob.GetComponent<Receiver>() != null) {
+            recievers.Add(ob);
             foreach (TNode t in transports) {
-                t.NewResiever(newObj);
+                t.NewResiever(ob);
             }
-            allLined.Add(newObj);
+            ob.GetComponent<Receiver>().shop = this;
+            allLined.Add(ob);
         }
 
-        if (newObj.GetComponent<TNode>() != null) {
-            allLined.Add(newObj);
+        if (ob.GetComponent<TNode>() != null) {
+            allLined.Add(ob);
 
-            newObj.GetComponent<TNode>().theGameObject = newObj;
-            newObj.GetComponent<TNode>().shop = this;
-            newObj.GetComponent<TNode>().allRecievers = recievers;
+            ob.GetComponent<TNode>().theGameObject = ob;
+            ob.GetComponent<TNode>().shop = this;
+            ob.GetComponent<TNode>().allRecievers = recievers;
 
             foreach(TNode n in transports) {
-                newObj.GetComponent<TNode>().allNodes.Add(n.theGameObject);
+                ob.GetComponent<TNode>().allNodes.Add(n.theGameObject);
             }
 
-            newObj.GetComponent<TNode>().CheckForRecievers();
-            transports.Add(newObj.GetComponent<TNode>());
+            ob.GetComponent<TNode>().CheckForRecievers();
+            transports.Add(ob.GetComponent<TNode>());
         }
 
-        pathFinder.ReUpdatePath(newObj, destination);
+        pathFinder.ReUpdatePath(ob, destination);
         SpendMoney(prices[selectedUnit]);
+        prices[selectedUnit]++;
+        priceTexts[selectedUnit].text = prices[selectedUnit].ToString();
 
         if (!Input.GetKey(KeyCode.LeftShift))
         {
@@ -264,6 +275,7 @@ public class Shop : MonoBehaviour
 
     public Sprite play;
     public Sprite pause;
+    public GameObject pauseButton;
     public Image butt;
     public bool paused = true;
     public void PauseButton()

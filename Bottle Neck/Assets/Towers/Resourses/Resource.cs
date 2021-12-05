@@ -47,6 +47,7 @@ public class Resource : MonoBehaviour
             } else {
                 foreach (TNode.Connector d in currentNode.GetComponent<TNode>().connectors) {
                     if (d.desination == destination) {
+                        speed = currentNode.GetComponent<TNode>().speedOfThing;
                         currentNode = d.nextNode;
                         if (currentNode == null) {
                             NoNode();

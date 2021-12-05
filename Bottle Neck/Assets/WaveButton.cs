@@ -30,8 +30,16 @@ public class WaveButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!spawn.nextWave && spawn.enemiesAlive.Count == 0 && !spawn.lastWave)
+        if (!spawn.nextWave && spawn.enemiesAlive.Count == 0 && !spawn.lastWave) {
             CountDown();
+            shop.pauseButton.SetActive(true);
+        }
+        else if (shop.paused){
+            shop.pauseButton.SetActive(false);
+            shop.PauseButton();
+        } else {
+            shop.pauseButton.SetActive(false);
+        }
     }
 
     private void CountDown()
