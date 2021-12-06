@@ -16,10 +16,13 @@ public class CannonShoot : MonoBehaviour
 
     public GameObject gun;
 
+    public Shop shop;
+
     // Start is called before the first frame update
     void Start()
     {
         targeting = GetComponent<TowerTargeting>();
+        shop = GetComponent<Receiver>().shop;
     }
 
     // Update is called once per frame
@@ -50,7 +53,7 @@ public class CannonShoot : MonoBehaviour
             }
         }
 
-        if (coolingDown > 0)
+        if (coolingDown > 0 && !shop.paused)
             coolingDown -= Time.deltaTime;
         
     }

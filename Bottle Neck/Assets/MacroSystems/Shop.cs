@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 
 public class Shop : MonoBehaviour
 {
@@ -201,8 +201,10 @@ public class Shop : MonoBehaviour
 
         pathFinder.ReUpdatePath(ob, destination);
         SpendMoney(prices[selectedUnit]);
-        prices[selectedUnit]++;
-        priceTexts[selectedUnit].text = prices[selectedUnit].ToString();
+        if(prices[selectedUnit] > 0) {
+            prices[selectedUnit]++;
+            priceTexts[selectedUnit].text = prices[selectedUnit].ToString();
+        }
 
         if (!Input.GetKey(KeyCode.LeftShift))
         {
@@ -278,14 +280,22 @@ public class Shop : MonoBehaviour
     public GameObject pauseButton;
     public Image butt;
     public bool paused = true;
+    public GameObject levelButton;
     public void PauseButton()
     {
         if (paused) {
             butt.sprite = pause;
             paused = false;
-        }else if (!paused) {
+            levelButton.SetActive(false);
+        } else if (!paused) {
             butt.sprite = play;
             paused = true;
+            levelButton.SetActive(true);
         }
+    }
+
+    public void LevelSelection()
+    {
+        SceneManager.LoadScene("Level Selection");
     }
 }

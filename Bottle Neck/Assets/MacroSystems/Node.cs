@@ -88,6 +88,9 @@ public class Node
                 } else {
                     fCost = gCost - hCost;
                 }
+            else {
+                fCost = gCost + hCost;
+            }
 
         }
         else

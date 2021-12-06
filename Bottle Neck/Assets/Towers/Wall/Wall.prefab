@@ -213,7 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   maxHealth: 500
-  blockPerHpValue: 50
+  blockPerHpValue: 1
   healthSlider: {fileID: 9199368070914811840}
 --- !u!1 &5785237539787981930
 GameObject:

@@ -233,7 +233,8 @@ public class TNode : MonoBehaviour
 
     public void NewConnection(Connector con, GameObject ob, float dis)
     {
-        ob.GetComponent<TNode>().refrences.Add(this.gameObject);
+        if(!ob.GetComponent<TNode>().refrences.Contains(this.gameObject))
+            ob.GetComponent<TNode>().refrences.Add(this.gameObject);
         Connector connect = new Connector(con, ob, dis);
         foreach (Connector c in connectors)
             if (c.CheckDest(con)) {

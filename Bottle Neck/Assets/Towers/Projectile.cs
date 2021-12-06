@@ -11,18 +11,26 @@ public class Projectile : MonoBehaviour
 
     public float distanceToKill;
 
+    private Shop shop;
+
+    private void Start()
+    {
+        shop = GameObject.Find("Shop").GetComponent<Shop>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        float disX = Mathf.Abs(transform.position.x - target.transform.position.x);
-        float disY = Mathf.Abs(transform.position.y - target.transform.position.y);
-        if (disX < distanceToKill && disY < distanceToKill)
-        {
-            DamageTarget();
+        if (!shop.paused) {
+            float disX = Mathf.Abs(transform.position.x - target.transform.position.x);
+            float disY = Mathf.Abs(transform.position.y - target.transform.position.y);
+            if (disX < distanceToKill && disY < distanceToKill) {
+                DamageTarget();
+            }
+            Move();
+            LookAt();
         }
-        Move();
-        LookAt();
+
     }
 
     private void LookAt()

@@ -25,9 +25,13 @@ public class Spawning : MonoBehaviour
     public GameObject winUI;
     public bool lastWave = false;
 
+    private Shop shop;
+
     // Start is called before the first frame update
     void Start()
     {
+        shop = GameObject.Find("Shop").GetComponent<Shop>();
+
         myNode = new Node[locations.Length];
         Vector2 pos = pathFinder.RoundCords(transform.position);
 
@@ -122,7 +126,7 @@ public class Spawning : MonoBehaviour
 
     void SpawnTiming(WaveData data)
     {
-        coolDown -= Time.deltaTime;
+        if(!shop.paused) coolDown -= Time.deltaTime;
         if (coolDown < 0)
         {
             if (hellSpawn)

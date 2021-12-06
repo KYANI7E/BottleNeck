@@ -71,15 +71,6 @@ public class PathFinder : MonoBehaviour
         }
     }
 
-
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            UpdateNodes();
-        }
-    }
-
     public Vector2 RoundCords(Vector2 cords)
     {
         int y = (int)Math.Round(cords.y);
@@ -94,7 +85,7 @@ public class PathFinder : MonoBehaviour
         Vector2 pos = RoundCords(vec);
         Node temp = nodes[(int)pos.y, (int)pos.x];
         temp.occupance = obj;
-        Invoke("UpdateNodes", .01f);
+        Invoke("UpdateNodes", .1f);
     }
 
     public Node FindPath(Vector3 pos)
@@ -116,8 +107,10 @@ public class PathFinder : MonoBehaviour
             Node current = null;
             foreach (Node node in open)
             {
-                if (current == null || node.fCost < current.fCost)
+
+                if (current == null || node.fCost < current.fCost) 
                     current = node;
+                
             }
             open.Remove(current);
             closed.Add(current);
@@ -140,13 +133,9 @@ public class PathFinder : MonoBehaviour
                 if (!open.Contains(friend))
                 {
                     friend.gCost = friend.distanceFrom(startingNode);
-                    if (current.fCost <= 0) {
-
+                    
                         friend.SetFCost();
-                    }
-                    else {
-                        friend.fCost = 0;
-                    }
+                    
                     friend.parentNode = current;
                     open.Add(friend);
                 }

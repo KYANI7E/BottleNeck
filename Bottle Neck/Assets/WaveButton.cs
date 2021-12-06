@@ -32,13 +32,6 @@ public class WaveButton : MonoBehaviour
     {
         if (!spawn.nextWave && spawn.enemiesAlive.Count == 0 && !spawn.lastWave) {
             CountDown();
-            shop.pauseButton.SetActive(true);
-        }
-        else if (shop.paused){
-            shop.pauseButton.SetActive(false);
-            shop.PauseButton();
-        } else {
-            shop.pauseButton.SetActive(false);
         }
     }
 
@@ -62,5 +55,7 @@ public class WaveButton : MonoBehaviour
         cir.fillAmount = 0;
         coolDown = 0;
         spawn.NextWave();
+        if(shop.paused)
+            shop.PauseButton();
     }
 }

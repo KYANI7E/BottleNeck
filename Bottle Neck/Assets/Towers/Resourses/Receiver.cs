@@ -25,8 +25,10 @@ public class Receiver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         rm = GameObject.FindGameObjectWithTag("RM").GetComponent<ResourceManager>();
         position = transform.position;
+
 
     }
 

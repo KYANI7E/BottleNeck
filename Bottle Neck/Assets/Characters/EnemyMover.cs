@@ -29,6 +29,7 @@ public class EnemyMover : MonoBehaviour
     private bool vertDircetion = false;
     public float distanceToTower;
 
+    private Shop shop;
 
     private void Awake()
     {
@@ -37,6 +38,7 @@ public class EnemyMover : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        shop = GameObject.Find("Shop").GetComponent<Shop>();
         pathFinder = GameObject.Find("PathFinder").GetComponent<PathFinder>();
         rand = Random.Range(-.4f, .4f);
     }
@@ -44,16 +46,12 @@ public class EnemyMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Y))
-            go = true;
-        if (Input.GetKey(KeyCode.T))
-            go = false;
-
-        if (!atBase && go && !dead)
-            GetPathAndMove();
-
-        if (atBase)
-            Attack();
+        if (!shop.paused) {
+            if (!atBase && go && !dead)
+                GetPathAndMove();
+            if (atBase)
+                Attack();
+        }
     }
 
     private void GetPathAndMove()

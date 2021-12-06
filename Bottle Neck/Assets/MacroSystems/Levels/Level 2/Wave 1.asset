@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec58bcda90d9a644d9fca46bad4820dd, type: 3}
   m_Name: Wave 1
   m_EditorClassIdentifier: 
-  location: 010000000100000001000000010000000100000002000000000000000200000000000000ffffffff
+  location: 01000000010000000100000001000000010000000200000000000000020000000000000001000000
   enemies:
   - {fileID: 5977649489505761911, guid: f5f1d5b2562fff94eb24a4c5f89e09bb, type: 3}
   - {fileID: 5977649489505761911, guid: f5f1d5b2562fff94eb24a4c5f89e09bb, type: 3}
@@ -23,27 +23,27 @@ MonoBehaviour:
   - {fileID: 5977649489505761911, guid: f5f1d5b2562fff94eb24a4c5f89e09bb, type: 3}
   - {fileID: 5977649489505761911, guid: f5f1d5b2562fff94eb24a4c5f89e09bb, type: 3}
   - {fileID: 5977649489505761911, guid: f5f1d5b2562fff94eb24a4c5f89e09bb, type: 3}
-  - {fileID: 5977649489505761911, guid: f5f1d5b2562fff94eb24a4c5f89e09bb, type: 3}
-  enemiesAmount: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  - {fileID: 5762055301062503360, guid: e0e7899201f3abe4ebad624f8c25272e, type: 3}
+  enemiesAmount: 0500000007000000090000000b0000000d0000000f00000010000000120000001400000019000000
   intervalBetweenEnemies:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  - 0.5
+  - 0.6
+  - 0.7
+  - 0.8
+  - 0.9
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
   timeBetweenSets:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5

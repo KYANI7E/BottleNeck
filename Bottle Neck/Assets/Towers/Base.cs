@@ -53,6 +53,8 @@ public class Base : MonoBehaviour
 
     private void GameOver()
     {
+        shop.PauseButton();
+        shop.pauseButton.SetActive(false);
         foreach(GameObject u in ui)
         {
             u.SetActive(false);
