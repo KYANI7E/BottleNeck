@@ -21,4 +21,9 @@ public class LevelSelection : MonoBehaviour
     {
         SceneManager.LoadScene(num);
     }
+    public void SelectLeve(string s)
+    {
+        SceneManager.LoadScene(s);
+    }
+
 }

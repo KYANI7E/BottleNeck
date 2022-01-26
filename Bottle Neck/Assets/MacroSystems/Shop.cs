@@ -96,16 +96,22 @@ public class Shop : MonoBehaviour
 
     }
 
-
+    float pressTimer = 0;
+    float pressTime = 0.2f;
     // Update is called once per frame
     void Update()
     {
         ShowGoast();
-        if (Input.GetMouseButton(1) && selectedUnit != -1)
+        if (Input.GetMouseButton(1)) 
+            pressTimer += Time.deltaTime;
+        
+        if (Input.GetMouseButtonUp(1) && pressTimer < pressTime && selectedUnit != -1)
             UnSelect();
 
-        if (Input.GetMouseButton(1) && shopOpen)
+        if (Input.GetMouseButtonUp(1) && pressTimer < pressTime && shopOpen)
             CloseShop();
+
+        if (Input.GetMouseButtonUp(1)) pressTimer = 0;
 
     }
 

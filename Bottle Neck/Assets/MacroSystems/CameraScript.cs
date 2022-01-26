@@ -54,7 +54,7 @@ public class CameraScript : MonoBehaviour
     //GolomOder youtube
     private void DragBoi()
     {
-        if (Input.GetMouseButton(2))
+        if (Input.GetMouseButton(2) || Input.GetMouseButton(1))
         {
             difference = (cam.ScreenToWorldPoint(Input.mousePosition)) - cam.transform.position;
             if (!drag)
