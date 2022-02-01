@@ -8,7 +8,8 @@ public class TNode : MonoBehaviour
     public Vector2 position;
 
     public List<GameObject> refrences = new List<GameObject>();
-    public List<Connector> connectors = new List<Connector>();
+    public Dictionary<GameObject, Connector> connectors = new Dictionary<GameObject, Connector>();
+    //public List<Connector> connectors = new List<Connector>();
     public List<GameObject> nodesInRange = new List<GameObject>();
     public List<GameObject> resourcesInRange = new List<GameObject>();
     public List<GameObject> recieversInRange = new List<GameObject>();
@@ -186,12 +187,12 @@ public class TNode : MonoBehaviour
     {
         float dis = Vector2.Distance(node.transform.position, this.transform.position);
         TNode newNode = node.GetComponent<TNode>();
-        foreach (Connector c in connectors) {
-            if(newNode.CheckIfShorterConnection(c, dis, this.gameObject)) {
+        foreach (var c in connectors) {
+            if(newNode.CheckIfShorterConnection(c.Value, dis, this.gameObject)) {
                 break;
             }
-            if(!newNode.CheckIfConnectionExists(c))
-                newNode.NewConnection(c, this.gameObject, dis);
+            if(!newNode.CheckIfConnectionExists(c.Value))
+                newNode.NewConnection(c.Value, this.gameObject, dis);
         }
         DrawLine();
 
@@ -206,25 +207,21 @@ public class TNode : MonoBehaviour
         }
         if (!newNode.CheckIfConnectionExists(con))
             newNode.NewConnection(con, this.gameObject, dis);
-     
-        
     }
 
     public bool CheckIfConnectionExists(Connector con)
     {
-        foreach (Connector g in connectors) {
-            if (g.CheckDest(con))
-                return true;
-        }
+        if (connectors.ContainsKey(con.desination))
+            return true;
         return false;
     }
 
     public bool CheckIfShorterConnection(Connector con, float dis, GameObject caller)
     {
-        foreach (Connector g in connectors) {
-            if (g.CheckDest(con) && g.GreaterThan(con, dis)) {
+        if (connectors.ContainsKey(con.desination)) {
+            if (connectors[con.desination].GreaterThan(con, dis)) {
+                connectors.Remove(con.desination);
                 NewConnection(con, caller, dis);
-                connectors.Remove(g);
                 return true;
             }
         }
@@ -236,12 +233,10 @@ public class TNode : MonoBehaviour
         if(!ob.GetComponent<TNode>().refrences.Contains(this.gameObject))
             ob.GetComponent<TNode>().refrences.Add(this.gameObject);
         Connector connect = new Connector(con, ob, dis);
-        foreach (Connector c in connectors)
-            if (c.CheckDest(con)) {
-                connectors.Remove(c);
-                break;
-            }
-        connectors.Add(connect);
+
+        if (connectors.ContainsKey(con.desination)) connectors.Remove(con.desination);
+
+        connectors.Add(connect.desination, connect);
         foreach(GameObject g in nodesInRange) {
             GiveConnection(connect, g);
         }
@@ -253,12 +248,8 @@ public class TNode : MonoBehaviour
     {
         ob.GetComponent<Receiver>().connectedNodes.Add(this);
         Connector connect = new Connector(ob, ob, dis);
-        foreach (Connector c in connectors)
-            if (c.CheckDest(ob)) {
-                connectors.Remove(c);
-                break;
-            }
-        connectors.Add(connect);
+        if (connectors.ContainsKey(ob)) connectors.Remove(ob);
+        connectors.Add(connect.desination, connect);
         foreach (GameObject g in nodesInRange) {
             GiveConnection(connect, g);
         }
@@ -282,27 +273,26 @@ public class TNode : MonoBehaviour
     public void PathBroke(GameObject ob, List<GameObject> dest)
     {
         bool checkIfPath = false;
-        List<Connector> tempConnections = new List<Connector>();
+        List<GameObject> tempConnections = new List<GameObject>();
 
         if(dest.Count > 0)
-            foreach(Connector c in connectors) {
-                foreach(GameObject d in dest)
-                    if (c.CheckDest(d) && c.CheckNextNode(ob)) {
-                        tempConnections.Add(c);
+            foreach(GameObject d in dest)
+                if(connectors.ContainsKey(d))
+                    if (connectors[d].CheckNextNode(ob)) {
+                        tempConnections.Add(d);
                         checkIfPath = true;
                         break;
                     }
-            }
         else
-            foreach(Connector c in connectors) {
-                if (c.CheckNextNode(ob)) {
-                    tempConnections.Add(c);
+            foreach (var c in connectors) {
+                if (c.Value.CheckNextNode(ob)) {
+                    tempConnections.Add(c.Key);
                     checkIfPath = true;
-                    dest.Add(c.desination);
+                    dest.Add(c.Value.desination);
                 }
             }
 
-        foreach (Connector c in tempConnections) connectors.Remove(c);
+        foreach (GameObject c in tempConnections) connectors.Remove(c);
 
         if (checkIfPath)
             if (GetComponent<ResourceGiver>() == null) {

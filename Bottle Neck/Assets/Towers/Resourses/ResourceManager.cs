@@ -44,17 +44,18 @@ public class ResourceManager : MonoBehaviour
         bool videCheck = false;
         foreach (ResourceGiver r in rg) {
             if (r.sendingToo != null) continue;
-            foreach (TNode.Connector d in r.connectors) {
-                if (d.desination == tempObject.thing) {
-                    if (d.distance < shortest) {
+
+            if (r.connectors.ContainsKey(tempObject.thing)) {
+                float dis = r.connectors[tempObject.thing].distance;
+                if (dis < shortest) {
                         bestGiver = r;
-                        shortest = d.distance;
+                        shortest = dis;
                         videCheck = true;
-                        break;
                     }
                 }
-            }
+            
         }
+
         if (!videCheck) {
 
             temp.Add(tempObject);
@@ -76,16 +77,17 @@ public class ResourceManager : MonoBehaviour
         bool videCheck = true;
         foreach(ResourceGiver r in rg) {
             if (r.sendingToo != null) continue;
-            foreach (TNode.Connector d in r.connectors) {
-                if (d.desination == tempObject) {
-                    if (d.distance < shortest) {
+            
+                if (r.connectors.ContainsKey(tempObject)) {
+                float dis = r.connectors[tempObject].distance;
+                    if (dis < shortest) {
                         bestGiver = r;
-                        shortest = d.distance;
+                        shortest = dis;
                         videCheck = false;
                         break;
                     }
                 }
-            }
+            
         }
 
 

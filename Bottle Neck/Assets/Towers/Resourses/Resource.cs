@@ -45,10 +45,10 @@ public class Resource : MonoBehaviour
             if (currentNode == destination) {
                 Arrived();
             } else {
-                foreach (TNode.Connector d in currentNode.GetComponent<TNode>().connectors) {
-                    if (d.desination == destination) {
+                    if (currentNode.GetComponent<TNode>().connectors.ContainsKey(destination)) {
+                        
                         speed = currentNode.GetComponent<TNode>().speedOfThing;
-                        currentNode = d.nextNode;
+                        currentNode = currentNode.GetComponent<TNode>().connectors[destination].nextNode;
                         if (currentNode == null) {
                             NoNode();
                             return;
@@ -57,9 +57,8 @@ public class Resource : MonoBehaviour
                             desPos = new Vector2(currentNode.GetComponent<TNode>().position.x, currentNode.GetComponent<TNode>().position.y);
                         else
                             desPos = new Vector2(currentNode.GetComponent<Receiver>().position.x, currentNode.GetComponent<Receiver>().position.y);
-                        break;
                     }
-                }
+                
             }
         }
     }

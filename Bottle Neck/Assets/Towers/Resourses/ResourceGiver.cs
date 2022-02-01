@@ -57,11 +57,9 @@ public class ResourceGiver : TNode
         GameObject res = GameObject.Instantiate(resource, transform.position, Quaternion.identity);
         res.GetComponent<Resource>().destination = gg;
         res.GetComponent<Resource>().shop = shop;
-        foreach(TNode.Connector t in connectors) {
-            if(t.desination == gg) {
+            if(connectors.ContainsKey(gg)) {
                 res.GetComponent<Resource>().speed = speedOfThing;
-                res.GetComponent<Resource>().currentNode = t.nextNode;
-            }
+                res.GetComponent<Resource>().currentNode = connectors[gg].nextNode;
         }
     }
 
@@ -72,16 +70,15 @@ public class ResourceGiver : TNode
         foreach(GameObject f in nodesInRange) {
             TNode t = f.GetComponent<TNode>();
             float dis = Vector2.Distance(transform.position, t.theGameObject.transform.position);
-            foreach(TNode.Connector d in t.connectors) {
-                if (d.CheckDest(g) && d.distance < temp.distance - dis) {
-                    temp = new TNode.Connector(g, t.theGameObject, d.distance + dis);
+            if (connectors.ContainsKey(g))
+                if (connectors[g].distance < temp.distance - dis) {
+                    temp = new TNode.Connector(g, t.theGameObject, connectors[g].distance + dis);
                     videCheck = false;
                     break;
                 }
-            }
         }
         if (videCheck) return;
-        connectors.Add(temp);
+        connectors.Add(temp.desination, temp);
     }
 
     public override void DrawLine()
